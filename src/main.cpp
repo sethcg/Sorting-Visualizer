@@ -1,7 +1,6 @@
 #define SDL_MAIN_USE_CALLBACKS 1 // USE CALLBACKS INSTEAD OF THE "main()" FUNCTION
 
 #include <stdlib.h>
-#include <time.h>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <imgui.h>
@@ -15,7 +14,10 @@ typedef struct AppContext {
     SDL_Window* window;
     SDL_Renderer* renderer;
 
-    ImDrawData *data;
+    ImDrawData* data;
+
+    int sortId;
+    char* sortOptions[8];
 } AppContext;
 
 // THIS FUNCTION RUNS ONCE AT STARTUP
@@ -32,6 +34,15 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         SDL_LogError(SDL_LOG_CATEGORY_CUSTOM, "Error %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
+    appContext->sortId = 0;
+    appContext->sortOptions[0] = (char*) "Bubble";
+    appContext->sortOptions[1] = (char*) "Cocktail";
+    appContext->sortOptions[2] = (char*) "Heap";
+    appContext->sortOptions[3] = (char*) "Insertion";
+    appContext->sortOptions[4] = (char*) "Merge";
+    appContext->sortOptions[5] = (char*) "Quick";
+    appContext->sortOptions[6] = (char*) "Radix";
+    appContext->sortOptions[7] = (char*) "Selection";
     *appstate = appContext;
 
     if (!SDL_CreateWindowAndRenderer("Sorting Visualizer", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &appContext->window, &appContext->renderer)) {
@@ -78,9 +89,22 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     ImGui::SetNextWindowSize(ImVec2(136, 0));
     ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_NoCollapse);
 
+    // TODO: ADD SORT FUNCTIONALITY WHEN THIS IS PRESSED
     if (ImGui::Button("Sort", ImVec2(120, 20))) {
         SDL_Log("Sorting...");
     }
+
+    // TODO: FIX THIS TO SET THE SORTING ALGORITHM
+    ImGui::SetNextItemWidth(120);
+    if(ImGui::BeginCombo("##Select_Sort", appContext->sortOptions[appContext->sortId], ImGuiComboFlags_NoArrowButton)) {
+        for(int i = 0; i < sizeof(appContext->sortOptions) / sizeof(char*); i++) {
+            if(ImGui::Selectable(appContext->sortOptions[i], (appContext->sortId == i))) {
+                appContext->sortId = i;
+            }
+        }
+        ImGui::EndCombo();
+    }
+
 
     ImGui::End();
 
