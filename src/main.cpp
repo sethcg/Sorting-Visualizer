@@ -7,17 +7,20 @@
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
 
+#include <List.hpp>
+#include <Rect.hpp>
+
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
 
 typedef struct AppContext {
     SDL_Window* window;
     SDL_Renderer* renderer;
-
     ImDrawData* data;
 
     int sortId;
     char* sortOptions[8];
+    rectangle* items;
 } AppContext;
 
 // THIS FUNCTION RUNS ONCE AT STARTUP
@@ -30,6 +33,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
     // SETUP APP STATE
     AppContext* appContext = (AppContext*) SDL_malloc(sizeof(AppContext));
+    appContext->items = (rectangle*) malloc(LIST_SIZE * sizeof(rectangle));
     if (appContext == NULL) {
         SDL_LogError(SDL_LOG_CATEGORY_CUSTOM, "Error %s", SDL_GetError());
         return SDL_APP_FAILURE;
@@ -61,6 +65,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     ImGui_ImplSDL3_InitForSDLRenderer(appContext->window, appContext->renderer);
     ImGui_ImplSDLRenderer3_Init(appContext->renderer);
 
+    // CREATE/DRAW GRID
+    CreateList(appContext->renderer, appContext->items, WINDOW_WIDTH, WINDOW_HEIGHT);
+
     return SDL_APP_CONTINUE;
 }
 
@@ -91,7 +98,33 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
     // TODO: ADD SORT FUNCTIONALITY WHEN THIS IS PRESSED
     if (ImGui::Button("Sort", ImVec2(120, 20))) {
-        SDL_Log("Sorting...");
+        // IterateSort(appContext->sortId);
+        switch(appContext->sortId) {
+            case 0:
+                SDL_Log("Bubble Sort...");
+                break;
+            case 1:
+                SDL_Log("Cocktail Sort...");
+                break;
+            case 2:
+                SDL_Log("Heap Sort...");
+                break;
+            case 3:
+                SDL_Log("Insertion Sort...");
+                break;
+            case 4:
+                SDL_Log("Merge Sort...");
+                break;
+            case 5:
+                SDL_Log("Quick Sort...");
+                break;
+            case 6:
+                SDL_Log("Radix Sort...");
+                break;
+            case 7:
+                SDL_Log("Selection Sort...");
+                break;
+        }
     }
 
     // TODO: FIX THIS TO SET THE SORTING ALGORITHM
@@ -110,10 +143,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
     // RENDERING
     ImGui::Render();
-
-    SDL_SetRenderDrawColor(appContext->renderer, 30, 30, 30, SDL_ALPHA_OPAQUE_FLOAT);
-    SDL_RenderClear(appContext->renderer);
-
+    DrawList(appContext->renderer, appContext->items);
     appContext->data = ImGui::GetDrawData();
     ImGui_ImplSDLRenderer3_RenderDrawData(appContext->data, appContext->renderer);
     SDL_RenderPresent(appContext->renderer);
