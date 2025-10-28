@@ -14,6 +14,8 @@
 #define WINDOW_HEIGHT 800
 
 typedef struct AppContext {
+    int width;
+    int height;
     SDL_Window* window;
     SDL_Renderer* renderer;
     ImDrawData* data;
@@ -47,6 +49,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     appContext->sortOptions[5] = (char*) "Quick";
     appContext->sortOptions[6] = (char*) "Radix";
     appContext->sortOptions[7] = (char*) "Selection";
+    appContext->width = WINDOW_WIDTH;
+    appContext->height = WINDOW_HEIGHT;
     *appstate = appContext;
 
     if (!SDL_CreateWindowAndRenderer("Sorting Visualizer", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &appContext->window, &appContext->renderer)) {
@@ -65,8 +69,10 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     ImGui_ImplSDL3_InitForSDLRenderer(appContext->window, appContext->renderer);
     ImGui_ImplSDLRenderer3_Init(appContext->renderer);
 
-    // CREATE/DRAW GRID
-    CreateList(appContext->renderer, appContext->items, WINDOW_WIDTH, WINDOW_HEIGHT);
+    SDL_SetWindowResizable(appContext->window, true);
+
+    // CREATE/DRAW RECTANGLE LIST
+    DrawList(appContext->renderer, appContext->items, appContext->width, appContext->height);
 
     return SDL_APP_CONTINUE;
 }
@@ -137,13 +143,13 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         }
         ImGui::EndCombo();
     }
-
-
+    
     ImGui::End();
 
     // RENDERING
     ImGui::Render();
-    DrawList(appContext->renderer, appContext->items);
+    SDL_GetWindowSize(appContext->window, &appContext->width, &appContext->height);
+    DrawList(appContext->renderer, appContext->items, appContext->width, appContext->height);
     appContext->data = ImGui::GetDrawData();
     ImGui_ImplSDLRenderer3_RenderDrawData(appContext->data, appContext->renderer);
     SDL_RenderPresent(appContext->renderer);

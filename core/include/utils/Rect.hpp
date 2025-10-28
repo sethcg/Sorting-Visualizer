@@ -1,8 +1,6 @@
 #ifndef RECT_H
 #define RECT_H
 
-#define RECT_WIDTH 16
-
 typedef struct {
     int index;
     int height;

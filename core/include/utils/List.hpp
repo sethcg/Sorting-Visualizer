@@ -6,15 +6,13 @@
 
 #define LIST_SIZE 32
 
-#define LIST_PADDING_SIZE 24
-#define LIST_RECT_SPACING_SIZE 2
+#define LIST_MARGIN_MINIMUM 24
 
-#define LIST_RECT_COLOR 50    // COLOR NUMBER: [0-255]
+#define LIST_RECT_PADDING 2
+#define LIST_RECT_COLOR 90    // COLOR NUMBER: [0-255]
 
-void CreateList(SDL_Renderer *renderer, rectangle* items, int window_width, int window_height);
+void DrawList(SDL_Renderer *renderer, rectangle* items, int window_width, int window_height);
 
-void DrawList(SDL_Renderer *renderer, rectangle* items);
-
-static void DrawRect(SDL_Renderer *renderer, rectangle* items, int index);
+static void DrawRect(SDL_Renderer *renderer, rectangle* items, int index, int window_width, int window_height);
 
 #endif
