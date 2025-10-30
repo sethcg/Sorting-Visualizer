@@ -71,8 +71,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
     SDL_SetWindowResizable(appContext->window, true);
 
-    // CREATE/DRAW RECTANGLE LIST
-    DrawList(appContext->renderer, appContext->items, appContext->width, appContext->height);
+    // CREATE LIST AND CALCULATE INITIAL WIDTH/HEIGHT OF RECTANGLES
+    CreateList(appContext->renderer, appContext->items, appContext->width, appContext->height);
 
     return SDL_APP_CONTINUE;
 }
@@ -84,6 +84,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event* event) {
     switch (event->type) {
         case SDL_EVENT_QUIT:
             return SDL_APP_SUCCESS;
+        case SDL_EVENT_WINDOW_RESIZED:
+            // RESIZE WIDTH/HEIGHT OF RECTANGLES
+            SDL_GetWindowSize(appContext->window, &appContext->width, &appContext->height);
+            CreateList(appContext->renderer, appContext->items, appContext->width, appContext->height);
     }
 
     ImGui_ImplSDL3_ProcessEvent(event);
@@ -148,8 +152,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
     // RENDERING
     ImGui::Render();
-    SDL_GetWindowSize(appContext->window, &appContext->width, &appContext->height);
-    DrawList(appContext->renderer, appContext->items, appContext->width, appContext->height);
+    DrawList(appContext->renderer, appContext->items);
     appContext->data = ImGui::GetDrawData();
     ImGui_ImplSDLRenderer3_RenderDrawData(appContext->data, appContext->renderer);
     SDL_RenderPresent(appContext->renderer);
