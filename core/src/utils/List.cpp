@@ -3,23 +3,25 @@
 #include <Rect.hpp>
 
 void CreateList(SDL_Renderer *renderer, rectangle* items, int window_width, int window_height) {
-    float drawable_width = window_width - (LIST_MARGIN_MINIMUM * 2);
-    float drawable_height = window_height - (LIST_MARGIN_MINIMUM * 2);
+    int drawable_width = window_width - (LIST_MARGIN_MINIMUM * 2);
+    int drawable_height = window_height - (LIST_MARGIN_MINIMUM * 2);
 
-    float rect_width = (drawable_width - (LIST_RECT_PADDING * (LIST_SIZE - 1))) / LIST_SIZE;
-    float rect_total_width = rect_width + LIST_RECT_PADDING;
+    int rect_width = (drawable_width - (LIST_RECT_PADDING * (LIST_SIZE - 1))) / LIST_SIZE;
+    int rect_total_width = rect_width + LIST_RECT_PADDING;
 
-    float window_width_padding = LIST_MARGIN_MINIMUM + ((drawable_width - (rect_total_width * LIST_SIZE)) / 2);
+    int width_offset = LIST_MARGIN_MINIMUM + ((drawable_width - (rect_total_width * LIST_SIZE)) / 2);
+    int height_offset = LIST_MARGIN_MINIMUM + (drawable_height / 10);
 
-    float rect_height = 0;
+    int rect_height = 0;
     for (int i = 0; i < LIST_SIZE; i++) {
-        rect_height = (i * 10) + 30;
+        int value = i + 1;
+        rect_height = (value * ((drawable_height - height_offset) / LIST_SIZE));
 
         items[i].index = i;
-        items[i].value = i + 1;
+        items[i].value = value;
         items[i].height = rect_height;
         items[i].width = rect_width;
-        items[i].start_x = (i * rect_total_width) + window_width_padding;
+        items[i].start_x = (i * rect_total_width) + width_offset;
         items[i].start_y = (window_height - LIST_MARGIN_MINIMUM) - rect_height;
     }
 }

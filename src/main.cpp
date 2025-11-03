@@ -12,6 +12,8 @@
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
+#define MINIMUM_WINDOW_WIDTH 400
+#define MINIMUM_WINDOW_HEIGHT 400
 
 typedef struct AppContext {
     int width;
@@ -70,6 +72,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     ImGui_ImplSDLRenderer3_Init(appContext->renderer);
 
     SDL_SetWindowResizable(appContext->window, true);
+    SDL_SetWindowMinimumSize(appContext->window, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
 
     // CREATE LIST AND CALCULATE INITIAL WIDTH/HEIGHT OF RECTANGLES
     CreateList(appContext->renderer, appContext->items, appContext->width, appContext->height);
@@ -104,7 +107,12 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     ImGui::NewFrame();
 
     ImGui::SetNextWindowSize(ImVec2(136, 0));
+    ImGui::SetNextWindowPos(ImVec2(24, 24), ImGuiCond_Once);
     ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_NoCollapse);
+
+    if (ImGui::Button("Shuffle", ImVec2(120, 20))) {
+        SDL_Log("Shuffling...");
+    }
 
     // TODO: ADD SORT FUNCTIONALITY WHEN THIS IS PRESSED
     if (ImGui::Button("Sort", ImVec2(120, 20))) {
