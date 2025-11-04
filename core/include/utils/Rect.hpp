@@ -3,7 +3,6 @@
 
 typedef struct {
     int value;
-    int index;
     int width;
     int height;
     int start_x;    // TOP-LEFT X COORDINATE
