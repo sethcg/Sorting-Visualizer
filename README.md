@@ -17,9 +17,9 @@
 ```bash
 
 # CONFIGURE
-cmake -S. -Bbuild --preset windows
+cmake --preset default
 
 # BUILD
-cmake --build build
+cmake --build --preset default
 
 ```

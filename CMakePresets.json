@@ -2,7 +2,7 @@
   "version": 6,
   "configurePresets": [
     {
-      "name": "windows",
+      "name": "default",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "toolchainFile": "./vcpkg/scripts/buildsystems/vcpkg.cmake",
@@ -11,6 +11,12 @@
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "BUILD_SHARED_LIBS": "OFF"
       }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default"
     }
   ]
 }

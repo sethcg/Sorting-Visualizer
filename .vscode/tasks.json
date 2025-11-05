@@ -4,7 +4,7 @@
         {
             "label": "Build",
             "type": "shell",
-            "command": "cmake --build build",
+            "command": "cmake --build --preset default",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -14,7 +14,7 @@
         {
             "label": "Configure",
             "type": "shell",
-            "command": "cmake -S. -Bbuild --preset windows"
+            "command": "cmake --preset default"
         }
     ]
 }
