@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  job:
+    name: ${{ matrix.os }}-${{ github.workflow }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+          submodules: true
+          fetch-depth: 0
+
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v11
+
+    - name: Configure
+      run: cmake --preset default
+
+    - name: Build
+      run: cmake --build --preset default
+
+    # - name: Run Tests
+    #   run: ctest --preset default
