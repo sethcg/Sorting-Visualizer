@@ -20,6 +20,9 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+    - name: Setup CMake and Ninja
+      uses: lukka/get-cmake@latest
+
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
 
