@@ -17,19 +17,21 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
       with:
-          submodules: true
-          fetch-depth: 0
+        submodules: true
+        fetch-depth: 0
 
     - name: Setup CMake and Ninja
       uses: lukka/get-cmake@latest
 
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
-      run: sudo apt-get -y install autoconf automake libtool
+      run: sudo apt update && sudo apt-get -y install build-ninja autoconf automake libtool
       shell: bash
 
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
+      with:
+        runVcpkgInstall: true    
 
     - name: Configure
       run: cmake --preset default

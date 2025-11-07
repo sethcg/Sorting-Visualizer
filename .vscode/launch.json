@@ -6,14 +6,14 @@
             "name": "Launch (Windows)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\build\\main.exe",
+            "program": "${workspaceFolder}\\build\\default\\main.exe",
             "preLaunchTask": "Build"
         },
         {
             "name": "Debug (gdb)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\build\\main.exe",
+            "program": "${workspaceFolder}\\build\\default\\main.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
