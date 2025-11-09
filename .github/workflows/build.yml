@@ -23,6 +23,7 @@ jobs:
     - name: Setup CMake and Ninja
       uses: lukka/get-cmake@latest
 
+    # RELATED ISSUE: https://github.com/microsoft/vcpkg/issues/46759
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
       run: sudo apt-get install -y libltdl-dev
@@ -38,6 +39,3 @@ jobs:
 
     - name: Build
       run: cmake --build --preset default
-
-    # - name: Run Tests
-    #   run: ctest --preset default
