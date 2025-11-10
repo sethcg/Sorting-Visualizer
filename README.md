@@ -22,8 +22,7 @@ cmake --preset default
 # BUILD
 cmake --build --preset default
 
-# TEST
-cd ./build/default
-ctest
+# RUN TESTS
+ctest --preset default
 
 ```

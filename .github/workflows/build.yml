@@ -39,3 +39,6 @@ jobs:
 
     - name: Build
       run: cmake --build --preset default
+
+    - name: Run Tests
+      run: ctest --preset default
