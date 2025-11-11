@@ -5,9 +5,10 @@
 ### Preview:
 
 ### Tooling:
-- [x] C++ Language 
+- [x] C++ Language
 - [x] SDL3
-- [x] ImGUI 
+- [x] ImGui
+- [x] Google Test
 - [x] Vcpkg
 - [x] CMake
 
