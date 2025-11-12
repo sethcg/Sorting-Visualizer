@@ -1,23 +1,20 @@
 #include <gtest/gtest.h>
-
 #include <SDL3/SDL.h>
 
-#include <Utils.hpp>
-
+#include <TestUtils.hpp>
 #include <List.hpp>
 #include <Rect.hpp>
 
-TEST(CoreTest, CreateListTest) {
+TEST(CoreTest, CreateListValueAssigned) {
     // ARRANGE
-    srand(time(NULL));
-    AppContext* appContext = (AppContext*) SDL_malloc(sizeof(AppContext));
-    appContext->items = (rectangle*) malloc(LIST_SIZE * sizeof(rectangle));
-    
+    SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(rectangle));
+    rectangle* items = (rectangle*) malloc(LIST_SIZE * sizeof(rectangle));
+
     // ACT
-    CreateList(appContext->renderer, appContext->items, 800, 800);
+    CreateList(renderer, items, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     // ASSERT
     for (int i = 0; i < LIST_SIZE; i++) {
-        EXPECT_EQ(appContext->items[i].value, (i + 1));
+        EXPECT_EQ(items[i].value, (i + 1));
     }
 }

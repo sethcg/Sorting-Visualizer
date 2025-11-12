@@ -8,25 +8,9 @@
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
 
+#include <App.hpp>
 #include <List.hpp>
 #include <Rect.hpp>
-
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 800
-#define MINIMUM_WINDOW_WIDTH 400
-#define MINIMUM_WINDOW_HEIGHT 400
-
-typedef struct AppContext {
-    int width;
-    int height;
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    ImDrawData* data;
-
-    int sortId;
-    char* sortOptions[8];
-    rectangle* items;
-} AppContext;
 
 // THIS FUNCTION RUNS ONCE AT STARTUP
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
