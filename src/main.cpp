@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <imgui.h>
@@ -11,6 +12,7 @@
 #include <App.hpp>
 #include <List.hpp>
 #include <Rect.hpp>
+#include <Sort.hpp>
 
 // THIS FUNCTION RUNS ONCE AT STARTUP
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
@@ -24,22 +26,17 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
     // SETUP APP STATE
     AppContext* appContext = (AppContext*) SDL_malloc(sizeof(AppContext));
-    appContext->items = (rectangle*) malloc(LIST_SIZE * sizeof(rectangle));
+    appContext->items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
     if (appContext == NULL) {
         SDL_LogError(SDL_LOG_CATEGORY_CUSTOM, "Error %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
     appContext->sortId = 0;
-    appContext->sortOptions[0] = (char*) "Bubble";
-    appContext->sortOptions[1] = (char*) "Cocktail";
-    appContext->sortOptions[2] = (char*) "Heap";
-    appContext->sortOptions[3] = (char*) "Insertion";
-    appContext->sortOptions[4] = (char*) "Merge";
-    appContext->sortOptions[5] = (char*) "Quick";
-    appContext->sortOptions[6] = (char*) "Radix";
-    appContext->sortOptions[7] = (char*) "Selection";
     appContext->width = WINDOW_WIDTH;
     appContext->height = WINDOW_HEIGHT;
+    appContext->isSorting = false;
+    appContext->lastTime = 0;
+    appContext->delayInMilliseconds = 50;
     *appstate = appContext;
 
     if (!SDL_CreateWindowAndRenderer("Sorting Visualizer", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &appContext->window, &appContext->renderer)) {
@@ -61,7 +58,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     SDL_SetWindowResizable(appContext->window, true);
     SDL_SetWindowMinimumSize(appContext->window, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
 
-    // CREATE LIST AND CALCULATE INITIAL WIDTH/HEIGHT OF RECTANGLES
+    // CREATE LIST AND CALCULATE INITIAL WIDTH/HEIGHT OF RectangleS
     CreateList(appContext->renderer, appContext->items, appContext->width, appContext->height);
 
     return SDL_APP_CONTINUE;
@@ -75,7 +72,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event* event) {
         case SDL_EVENT_QUIT:
             return SDL_APP_SUCCESS;
         case SDL_EVENT_WINDOW_RESIZED:
-            // RESIZE WIDTH/HEIGHT OF RECTANGLES
+            // RESIZE WIDTH/HEIGHT OF RectangleS
             SDL_GetWindowSize(appContext->window, &appContext->width, &appContext->height);
             ResizeList(appContext->renderer, appContext->items, appContext->width, appContext->height);
     }
@@ -98,46 +95,25 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_NoCollapse);
 
     if (ImGui::Button("Shuffle", ImVec2(120, 20))) {
-        ShuffleList(appContext->renderer, appContext->items);
+        ShuffleList(appContext->items);
         ResizeList(appContext->renderer, appContext->items, appContext->width, appContext->height);
     }
 
     // TODO: ADD SORT FUNCTIONALITY WHEN THIS IS PRESSED
     if (ImGui::Button("Sort", ImVec2(120, 20))) {
-        // IterateSort(appContext->sortId);
-        switch(appContext->sortId) {
-            case 0:
-                SDL_Log("Bubble Sort...");
-                break;
-            case 1:
-                SDL_Log("Cocktail Sort...");
-                break;
-            case 2:
-                SDL_Log("Heap Sort...");
-                break;
-            case 3:
-                SDL_Log("Insertion Sort...");
-                break;
-            case 4:
-                SDL_Log("Merge Sort...");
-                break;
-            case 5:
-                SDL_Log("Quick Sort...");
-                break;
-            case 6:
-                SDL_Log("Radix Sort...");
-                break;
-            case 7:
-                SDL_Log("Selection Sort...");
-                break;
+        if(!appContext->isSorting) {
+            appContext->sequence = GetSortSequence(appContext->sortId, appContext->items);
+            appContext->stepIndex = 0;
+            appContext->isSorting = true;
         }
     }
 
     // TODO: FIX THIS TO SET THE SORTING ALGORITHM
     ImGui::SetNextItemWidth(120);
-    if(ImGui::BeginCombo("##Select_Sort", appContext->sortOptions[appContext->sortId], ImGuiComboFlags_NoArrowButton)) {
-        for(int i = 0; i < sizeof(appContext->sortOptions) / sizeof(char*); i++) {
-            if(ImGui::Selectable(appContext->sortOptions[i], (appContext->sortId == i))) {
+    if(ImGui::BeginCombo("##Select_Sort", sortOptions[appContext->sortId], ImGuiComboFlags_NoArrowButton)) {
+        for(int i = 0; i < sizeof(sortOptions) / sizeof(char*); i++) {
+            ImGuiSelectableFlags disabled = appContext->isSorting ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
+            if(ImGui::Selectable(sortOptions[i], (appContext->sortId == i)), disabled) {
                 appContext->sortId = i;
             }
         }
@@ -145,6 +121,26 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     }
     
     ImGui::End();
+
+    // RENDERING EACH SORT'S ITERATION
+    if(appContext->isSorting) {
+        // DELAY ITERATING THE SORTING STEP
+        static SDL_Time current = 0;
+        SDL_GetCurrentTime(&current);
+        int currentTime = (int) SDL_NS_TO_MS(current);
+        int elapsedTime = currentTime - appContext->lastTime;
+        if(elapsedTime > appContext->delayInMilliseconds) {
+            if(IncrementStep(appContext->sortId, appContext->stepIndex, appContext->sequence, appContext->items)) {
+                appContext->isSorting = false;
+                appContext->lastTime = 0;
+                appContext->stepIndex = 0;
+            } else {
+                appContext->lastTime = currentTime;
+                appContext->stepIndex++;
+            }
+            ResizeList(appContext->renderer, appContext->items, appContext->width, appContext->height);
+        }
+    }
 
     // RENDERING
     ImGui::Render();

@@ -3,7 +3,7 @@
 #include <List.hpp>
 #include <Rect.hpp>
 
-void CreateList(SDL_Renderer *renderer, rectangle* items, int window_width, int window_height) {
+void CreateList(SDL_Renderer *renderer, Rectangle* items, int window_width, int window_height) {
     int drawable_width = window_width - (LIST_MARGIN_MINIMUM * 2);
 
     int height_offset = ((window_height - (LIST_MARGIN_MINIMUM * 2)) / 10);
@@ -23,7 +23,7 @@ void CreateList(SDL_Renderer *renderer, rectangle* items, int window_width, int 
     }
 }
 
-void ResizeList(SDL_Renderer *renderer, rectangle* items, int window_width, int window_height) {
+void ResizeList(SDL_Renderer *renderer, Rectangle* items, int window_width, int window_height) {
     int drawable_width = window_width - (LIST_MARGIN_MINIMUM * 2);
 
     int height_offset = ((window_height - (LIST_MARGIN_MINIMUM * 2)) / 10);
@@ -42,7 +42,7 @@ void ResizeList(SDL_Renderer *renderer, rectangle* items, int window_width, int 
     }
 }
 
-void ShuffleList(SDL_Renderer *renderer, rectangle* items) {
+void ShuffleList(Rectangle* items) {
     // FISHER-YATES SHUFFLE
     int j, temp = 0;
     for (int i = LIST_SIZE - 1; i > 0; i--) {
@@ -55,7 +55,7 @@ void ShuffleList(SDL_Renderer *renderer, rectangle* items) {
     }
 }
 
-void DrawList(SDL_Renderer *renderer, rectangle* items) {
+void DrawList(SDL_Renderer *renderer, Rectangle* items) {
     // DRAW BACKGROUND COLOR
     SDL_SetRenderDrawColor(renderer, 30, 30, 30, SDL_ALPHA_OPAQUE_FLOAT);
     SDL_RenderClear(renderer);
@@ -65,7 +65,7 @@ void DrawList(SDL_Renderer *renderer, rectangle* items) {
     }
 }
 
-static void DrawRect(SDL_Renderer *renderer, rectangle* items, int index) {
+static void DrawRect(SDL_Renderer *renderer, Rectangle* items, int index) {
     SDL_FRect rect_item = {
         .x = (float) items[index].start_x,
         .y = (float) items[index].start_y,
@@ -73,7 +73,7 @@ static void DrawRect(SDL_Renderer *renderer, rectangle* items, int index) {
         .h = (float) items[index].height,
     };
 
-    // DRAW RECTANGLE
+    // DRAW Rectangle
     SDL_SetRenderDrawColor(renderer, 50, 50, 50, SDL_ALPHA_OPAQUE_FLOAT);
     SDL_RenderFillRect(renderer, &rect_item);
 }

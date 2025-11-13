@@ -7,6 +7,6 @@ typedef struct {
     int height;
     int start_x;    // TOP-LEFT X COORDINATE
     int start_y;    // TOP-LEFT Y COORDINATE
-} rectangle;
+} Rectangle;
 
 #endif

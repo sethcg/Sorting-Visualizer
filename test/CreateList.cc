@@ -7,8 +7,8 @@
 
 TEST(CoreTest, CreateListValueAssigned) {
     // ARRANGE
-    SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(rectangle));
-    rectangle* items = (rectangle*) malloc(LIST_SIZE * sizeof(rectangle));
+    SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
+    Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
 
     // ACT
     CreateList(renderer, items, WINDOW_WIDTH, WINDOW_HEIGHT);
