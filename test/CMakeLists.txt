@@ -1,7 +1,10 @@
 # GET ALL SOURCE FILES
-FILE(GLOB TEST_SOURCES *.cc)
+FILE(GLOB TEST_SOURCES 
+    sorts/*.cc
+    utils/*.cc
+)
 
-ADD_EXECUTABLE(unit_tests ${TEST_SOURCES})
+ADD_EXECUTABLE(unit_tests ${SOURCES} ${TEST_SOURCES})
 
 TARGET_INCLUDE_DIRECTORIES(unit_tests PRIVATE include)
 

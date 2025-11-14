@@ -6,10 +6,14 @@
 #include <Rect.hpp>
 #include <Sort.hpp>
 
-static int GetStepCount_BubbleSort(Rectangle* items);
+namespace BubbleSort {
 
-SortSequence GetSequence_BubbleSort(Rectangle* items);
+    int GetStepCount_BubbleSort(Rectangle* items);
 
-bool IncrementStep_BubbleSort(int stepNum, SortSequence sequence, Rectangle* items);
+    SortSequence GetSequence_BubbleSort(Rectangle* items);
+
+    bool IncrementStep_BubbleSort(int stepNum, SortSequence sequence, Rectangle* items);
+
+}
 
 #endif

@@ -8,7 +8,7 @@
 SortSequence GetSortSequence(int sortId, Rectangle* items) {
     switch(sortId) {
         case 0:
-            return GetSequence_BubbleSort(items);
+            return BubbleSort::GetSequence_BubbleSort(items);
             break;
         case 1:
             SDL_Log("Start Cocktail Sort...");
@@ -38,7 +38,7 @@ SortSequence GetSortSequence(int sortId, Rectangle* items) {
 bool IncrementStep(int sortId, int stepIndex, SortSequence sequence, Rectangle* items) {
     switch(sortId) {
         case 0:
-            return IncrementStep_BubbleSort(stepIndex, sequence, items);
+            return BubbleSort::IncrementStep_BubbleSort(stepIndex, sequence, items);
         case 1:
             SDL_Log("Iterate Cocktail Sort...");
             break;

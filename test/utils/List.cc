@@ -2,10 +2,11 @@
 #include <SDL3/SDL.h>
 
 #include <TestUtils.hpp>
+
 #include <List.hpp>
 #include <Rect.hpp>
 
-TEST(CoreTest, CreateListValueAssigned) {
+TEST(List_Test, CreateList_ValueAssigned) {
     // ARRANGE
     SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
