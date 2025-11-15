@@ -115,9 +115,8 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     ImGui::SetNextItemWidth(120);
     if(ImGui::BeginCombo("##Select_Sort", sortOptions[appContext->sortId], ImGuiComboFlags_NoArrowButton)) {
         for(int i = 0; i < sizeof(sortOptions) / sizeof(char*); i++) {
-            ImGuiSelectableFlags disabled = appContext->isSorting ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
-            if(ImGui::Selectable(sortOptions[i], (appContext->sortId == i)), disabled) {
-                appContext->sortId = i;
+            if(ImGui::Selectable(sortOptions[i], (appContext->sortId == i))) {
+                if(!appContext->isSorting) appContext->sortId = i;
             }
         }
         ImGui::EndCombo();
@@ -133,7 +132,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         int currentTime = abs((int) SDL_NS_TO_MS(current));
         int elapsedTime = abs(currentTime - appContext->lastTime);
         if(elapsedTime > appContext->delayInMilliseconds) {
-            if(IncrementStep(appContext->sortId, appContext->stepIndex, appContext->sequence, appContext->items)) {
+            if(IncrementStep(appContext->stepIndex, appContext->sequence, appContext->items)) {
                 appContext->isSorting = false;
                 appContext->lastTime = 0;
                 appContext->stepIndex = 0;

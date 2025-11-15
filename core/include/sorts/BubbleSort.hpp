@@ -12,8 +12,6 @@ namespace BubbleSort {
 
     SortSequence GetSequence_BubbleSort(Rectangle* items);
 
-    bool IncrementStep_BubbleSort(int stepNum, SortSequence sequence, Rectangle* items);
-
 }
 
 #endif

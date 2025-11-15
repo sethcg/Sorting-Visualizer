@@ -20,6 +20,6 @@ typedef struct {
 
 SortSequence GetSortSequence(int sortId, Rectangle* items);
 
-bool IncrementStep(int sortId, int stepIndex, SortSequence sequence, Rectangle* items);
+bool IncrementStep(int stepIndex, SortSequence sequence, Rectangle* items);
 
 #endif

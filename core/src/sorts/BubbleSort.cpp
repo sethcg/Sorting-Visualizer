@@ -1,12 +1,11 @@
 #include <stdlib.h>
-#include <algorithm>
-
 #include <SDL3/SDL.h>
 
 #include <BubbleSort.hpp>
 #include <List.hpp>
 #include <Rect.hpp>
 #include <Sort.hpp>
+#include <Utils.hpp>
 
 namespace BubbleSort {
 
@@ -22,21 +21,18 @@ namespace BubbleSort {
             swapped = false;
             for (int j = 0; j < LIST_SIZE - i - 1; j++) {
                 if (array[j].value > array[j + 1].value) {
-                    temp = array[j].value;
-                    array[j].value = array[j + 1].value;
-                    array[j + 1].value = temp;
+                    Swap(array, j, (j + 1));
                     swapped = true;
-
+                    
                     // INCREMENT THE STEP COUNTER
                     stepCount++;
                 }
             }
-            if (!swapped) {
-                // INCREMENT FOR FINAL STEP
-                stepCount++; 
-                break;
-            }
+            if (!swapped) break;
         }
+
+        // INCREMENT FOR FINAL STEP
+        stepCount++; 
 
         free(array);
         return stepCount;
@@ -59,59 +55,37 @@ namespace BubbleSort {
             swapped = false;
             for (int j = 0; j < LIST_SIZE - index - 1; j++) {
                 if (array[j].value > array[j + 1].value) {
-                    // SWAP VALUES
-                    temp = array[j].value;
-                    array[j].value = array[j + 1].value;
-                    array[j + 1].value = temp;
+                    Swap(array, j, (j + 1));
                     swapped = true;
 
                     // RECORD THE SORTING STEP (SNAPSHOT OF THE ARRAY)
                     for (int i = 0; i < LIST_SIZE; i++) {
-                        bool isOrdered = i >= (LIST_SIZE - index);
-                        bool isCurrent = i == j;
-                        bool isChecking = i == (j + 1);
-
                         offset = (currentStep * LIST_SIZE) + i;
                         sort.steps[offset].value = array[i].value;
 
                         // SET RECTANGLE COLOR
-                        sort.steps[offset].rect_color = 
-                            isOrdered ? rect_green_color : 
-                            isCurrent ? rect_blue_color : 
-                            isChecking ? rect_orange_color : rect_base_color;
+                        bool isOrdered = i >= (LIST_SIZE - index);
+                        bool isCurrent = i == j;
+                        bool isChecking = i == (j + 1);
+                        sort.steps[offset].rect_color = GetRectangleColor(isOrdered, isCurrent, isChecking);
                     }
                     currentStep++;
                 }
             }
 
             // BREAK WHEN NO ELEMENTS SWAPPED (OPTIMIZED)
-            if (!swapped) {
-                // RECORD FINAL STEP
-                for (int i = 0; i < LIST_SIZE; i++) {
-                    offset = (currentStep * LIST_SIZE) + i;
-                    sort.steps[offset].value = array[i].value;
-                    sort.steps[offset].rect_color = rect_green_color;
-                }
-                break;
-            }
+            if (!swapped) break;
+        }
+
+        // RECORD FINAL STEP (ORDERED LIST)
+        for (int i = 0; i < LIST_SIZE; i++) {
+            offset = (currentStep * LIST_SIZE) + i;
+            sort.steps[offset].value = array[i].value;
+            sort.steps[offset].rect_color = rect_green_color;
         }
 
         free(array);
         return sort;
-    }
-
-    bool IncrementStep_BubbleSort(int index, SortSequence sequence, Rectangle* items) {
-        // RETURN TRUE WHEN SORT IS COMPLETE
-        if(index >= sequence.stepCount) return true;
-
-        // SWAP THE VALUES TO THAT OF THE CURRENT STEP SNAPSHOT
-        int offset;
-        for (int i = 0; i < LIST_SIZE; i++) {
-            offset = (index * LIST_SIZE) + i;
-            items[i].value = sequence.steps[offset].value;
-            items[i].rect_color = sequence.steps[offset].rect_color;
-        }
-        return false;
     }
 
 }
