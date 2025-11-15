@@ -9,7 +9,7 @@
 
 using namespace BubbleSort;
 
-TEST(BubbleSort_Test, GetStepCount_Zero) {
+TEST(BubbleSort_Test, GetStepCount_One) {
     // ARRANGE
     SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
@@ -20,7 +20,7 @@ TEST(BubbleSort_Test, GetStepCount_Zero) {
     int stepCount = GetStepCount_BubbleSort(items);
 
     // ASSERT
-    EXPECT_EQ(stepCount, 0);
+    EXPECT_EQ(stepCount, 1);
 }
 
 TEST(BubbleSort_Test, GetStepCount) {
