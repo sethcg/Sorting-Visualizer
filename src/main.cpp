@@ -36,7 +36,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     appContext->height = WINDOW_HEIGHT;
     appContext->isSorting = false;
     appContext->lastTime = 0;
-    appContext->delayInMilliseconds = 50;
+    appContext->delayInMilliseconds = DEFAULT_SORTING_DELAY_MILLISECONDS;
     *appstate = appContext;
 
     if (!SDL_CreateWindowAndRenderer("Sorting Visualizer", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &appContext->window, &appContext->renderer)) {
@@ -95,6 +95,9 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_NoCollapse);
 
     if (ImGui::Button("Shuffle", ImVec2(120, 20))) {
+        appContext->isSorting = false;
+        appContext->lastTime = 0;
+        appContext->stepIndex = 0;
         ShuffleList(appContext->items);
         ResizeList(appContext->renderer, appContext->items, appContext->width, appContext->height);
     }
@@ -127,8 +130,8 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         // DELAY ITERATING THE SORTING STEP
         static SDL_Time current = 0;
         SDL_GetCurrentTime(&current);
-        int currentTime = (int) SDL_NS_TO_MS(current);
-        int elapsedTime = currentTime - appContext->lastTime;
+        int currentTime = abs((int) SDL_NS_TO_MS(current));
+        int elapsedTime = abs(currentTime - appContext->lastTime);
         if(elapsedTime > appContext->delayInMilliseconds) {
             if(IncrementStep(appContext->sortId, appContext->stepIndex, appContext->sequence, appContext->items)) {
                 appContext->isSorting = false;

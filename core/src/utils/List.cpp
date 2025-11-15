@@ -20,6 +20,7 @@ void CreateList(SDL_Renderer *renderer, Rectangle* items, int window_width, int 
         items[i].height = (i + 1) * (drawable_height / LIST_SIZE);
         items[i].start_x = LIST_MARGIN_MINIMUM + (i * (rect_width + LIST_RECT_PADDING)) + width_offset;
         items[i].start_y = LIST_MARGIN_MINIMUM + (drawable_height - rect_height) + height_offset;
+        items[i].rect_color = rect_base_color;
     }
 }
 
@@ -53,6 +54,11 @@ void ShuffleList(Rectangle* items) {
         items[i].value = items[j].value;
         items[j].value = temp;
     }
+    
+    // RESET THE RECTANGLE COLOR
+    for (int i = 0; i < LIST_SIZE; i++) {
+        items[i].rect_color = rect_base_color;
+    }
 }
 
 void DrawList(SDL_Renderer *renderer, Rectangle* items) {
@@ -73,7 +79,7 @@ static void DrawRect(SDL_Renderer *renderer, Rectangle* items, int index) {
         .h = (float) items[index].height,
     };
 
-    // DRAW Rectangle
-    SDL_SetRenderDrawColor(renderer, 50, 50, 50, SDL_ALPHA_OPAQUE_FLOAT);
+    // DRAW RECTANGLE
+    SDL_SetRenderDrawColor(renderer, items[index].rect_color.r, items[index].rect_color.g, items[index].rect_color.b, SDL_ALPHA_OPAQUE_FLOAT);
     SDL_RenderFillRect(renderer, &rect_item);
 }

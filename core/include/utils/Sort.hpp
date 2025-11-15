@@ -7,8 +7,13 @@
 #include <Rect.hpp>
 
 typedef struct {
+    int value;
+    rgb_color rect_color;
+} SortStep;
+
+typedef struct {
     int stepCount;
-    int* steps;
+    SortStep* steps;
 } SortSequence;
 
 #define create_sort_sequence(count) { .stepCount = count };

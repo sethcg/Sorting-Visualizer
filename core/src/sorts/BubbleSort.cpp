@@ -31,7 +31,11 @@ namespace BubbleSort {
                     stepCount++;
                 }
             }
-            if (!swapped) break;
+            if (!swapped) {
+                // INCREMENT FOR FINAL STEP
+                stepCount++; 
+                break;
+            }
         }
 
         free(array);
@@ -43,7 +47,7 @@ namespace BubbleSort {
         int stepCount = GetStepCount_BubbleSort(items);
 
         SortSequence sort = create_sort_sequence(stepCount);
-        sort.steps = (int*) malloc(LIST_SIZE * stepCount * sizeof(int));
+        sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
 
         Rectangle* array = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
         memcpy(array, items, LIST_SIZE * sizeof(Rectangle));
@@ -63,15 +67,33 @@ namespace BubbleSort {
 
                     // RECORD THE SORTING STEP (SNAPSHOT OF THE ARRAY)
                     for (int i = 0; i < LIST_SIZE; i++) {
+                        bool isOrdered = i >= (LIST_SIZE - index);
+                        bool isCurrent = i == j;
+                        bool isChecking = i == (j + 1);
+
                         offset = (currentStep * LIST_SIZE) + i;
-                        sort.steps[offset] = array[i].value;
+                        sort.steps[offset].value = array[i].value;
+
+                        // SET RECTANGLE COLOR
+                        sort.steps[offset].rect_color = 
+                            isOrdered ? rect_green_color : 
+                            isCurrent ? rect_blue_color : 
+                            isChecking ? rect_orange_color : rect_base_color;
                     }
                     currentStep++;
                 }
             }
 
             // BREAK WHEN NO ELEMENTS SWAPPED (OPTIMIZED)
-            if (!swapped) break;
+            if (!swapped) {
+                // RECORD FINAL STEP
+                for (int i = 0; i < LIST_SIZE; i++) {
+                    offset = (currentStep * LIST_SIZE) + i;
+                    sort.steps[offset].value = array[i].value;
+                    sort.steps[offset].rect_color = rect_green_color;
+                }
+                break;
+            }
         }
 
         free(array);
@@ -86,7 +108,8 @@ namespace BubbleSort {
         int offset;
         for (int i = 0; i < LIST_SIZE; i++) {
             offset = (index * LIST_SIZE) + i;
-            items[i].value = sequence.steps[offset];
+            items[i].value = sequence.steps[offset].value;
+            items[i].rect_color = sequence.steps[offset].rect_color;
         }
         return false;
     }

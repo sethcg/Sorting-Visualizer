@@ -56,6 +56,6 @@ TEST(BubbleSort_Test, GetSequence_CorrectOrder) {
     int offset;
     for (int i = 0; i < LIST_SIZE; i++) {
         offset = (lastStep * LIST_SIZE) + i;
-        EXPECT_EQ(sequence.steps[offset], (i + 1));
+        EXPECT_EQ(sequence.steps[offset].value, (i + 1));
     }
 }

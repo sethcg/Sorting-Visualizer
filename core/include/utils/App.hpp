@@ -12,6 +12,8 @@
 #define MINIMUM_WINDOW_WIDTH 400
 #define MINIMUM_WINDOW_HEIGHT 400
 
+#define DEFAULT_SORTING_DELAY_MILLISECONDS 100
+
 typedef struct {
     int width;
     int height;
