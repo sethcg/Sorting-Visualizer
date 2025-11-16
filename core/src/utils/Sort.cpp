@@ -9,9 +9,9 @@
 SortSequence GetSortSequence(int sortId, Rectangle* items) {
     switch(sortId) {
         case 0:
-            return BubbleSort::GetSequence_BubbleSort(items);
+            return BubbleSort::GetSequence(items);
         case 1:
-            return CocktailSort::GetSequence_CocktailSort(items);
+            return CocktailSort::GetSequence(items);
         case 2:
             SDL_Log("Start Heap Sort...");
             break;
@@ -36,7 +36,9 @@ SortSequence GetSortSequence(int sortId, Rectangle* items) {
 
 bool IncrementStep(int stepIndex, SortSequence sequence, Rectangle* items) {
     // RETURN TRUE WHEN SORT IS COMPLETE
-    if(stepIndex >= sequence.stepCount) return true;
+    if(stepIndex >= sequence.stepCount) {
+        return true;
+    }
 
     // SWAP THE VALUES TO THAT OF THE CURRENT STEP SNAPSHOT
     int offset;

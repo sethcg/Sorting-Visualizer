@@ -9,11 +9,10 @@
 
 namespace BubbleSort {
 
-    int GetStepCount_BubbleSort(Rectangle* items) {
-        Rectangle* array = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
-        memcpy(array, items, LIST_SIZE * sizeof(Rectangle));
+    int GetStepCount(Rectangle* items) {
+        Rectangle* array = CopyArray(items);
 
-        int stepCount = 0;
+        int stepCount = 1;
 
         int temp;
         bool swapped;
@@ -31,22 +30,18 @@ namespace BubbleSort {
             if (!swapped) break;
         }
 
-        // INCREMENT FOR FINAL STEP
-        stepCount++; 
-
         free(array);
         return stepCount;
     }
 
-    SortSequence GetSequence_BubbleSort(Rectangle* items) {
-        // INITIALLY RUN THE BUBBLE SORT CALCULATING THE TOTAL NUMBER OF STEPS
-        int stepCount = GetStepCount_BubbleSort(items);
+    SortSequence GetSequence(Rectangle* items) {
+        Rectangle* array = CopyArray(items);
+
+        // INITIALLY RUN THE SORT TO CALCULATE THE TOTAL NUMBER OF STEPS
+        int stepCount = GetStepCount(items);
 
         SortSequence sort = create_sort_sequence(stepCount);
         sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
-
-        Rectangle* array = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
-        memcpy(array, items, LIST_SIZE * sizeof(Rectangle));
 
         int currentStep = 0;
         int temp, offset;
@@ -63,7 +58,7 @@ namespace BubbleSort {
                         offset = (currentStep * LIST_SIZE) + i;
                         sort.steps[offset].value = array[i].value;
 
-                        // SET RECTANGLE COLOR
+                        // SET RECTANGLE COLOR VALUE
                         bool isOrdered = i >= (LIST_SIZE - index);
                         bool isCurrent = i == j;
                         bool isChecking = i == (j + 1);

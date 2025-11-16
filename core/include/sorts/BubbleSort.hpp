@@ -8,9 +8,9 @@
 
 namespace BubbleSort {
 
-    int GetStepCount_BubbleSort(Rectangle* items);
+    int GetStepCount(Rectangle* items);
 
-    SortSequence GetSequence_BubbleSort(Rectangle* items);
+    SortSequence GetSequence(Rectangle* items);
 
 }
 

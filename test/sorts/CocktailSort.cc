@@ -3,13 +3,13 @@
 
 #include <TestUtils.hpp>
 
-#include <BubbleSort.hpp>
+#include <CocktailSort.hpp>
 #include <List.hpp>
 #include <Rect.hpp>
 
-using namespace BubbleSort;
+using namespace CocktailSort;
 
-TEST(BubbleSort_Test, GetStepCount_One) {
+TEST(CocktailSort_Test, GetStepCount_One) {
     // ARRANGE
     SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
@@ -23,7 +23,7 @@ TEST(BubbleSort_Test, GetStepCount_One) {
     EXPECT_EQ(stepCount, 1);
 }
 
-TEST(BubbleSort_Test, GetStepCount_GreaterThanOne) {
+TEST(CocktailSort_Test, GetStepCount_GreaterThanOne) {
     // ARRANGE
     SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
@@ -38,7 +38,7 @@ TEST(BubbleSort_Test, GetStepCount_GreaterThanOne) {
     EXPECT_TRUE(stepCount > 1);
 }
 
-TEST(BubbleSort_Test, GetSequence_CorrectOrder) {
+TEST(CocktailSort_Test, GetSequence_CorrectOrder) {
     // ARRANGE
     SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));

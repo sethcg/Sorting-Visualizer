@@ -8,9 +8,9 @@
 
 namespace CocktailSort {
 
-    int GetStepCount_CocktailSort(Rectangle* items);
+    int GetStepCount(Rectangle* items);
 
-    SortSequence GetSequence_CocktailSort(Rectangle* items);
+    SortSequence GetSequence(Rectangle* items);
 
 }
 

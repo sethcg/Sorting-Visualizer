@@ -1,5 +1,4 @@
 #include <stdlib.h>
-
 #include <SDL3/SDL.h>
 
 #include <CocktailSort.hpp>
@@ -10,9 +9,8 @@
 
 namespace CocktailSort {
 
-    int GetStepCount_CocktailSort(Rectangle* items) {
-        Rectangle* array = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
-        memcpy(array, items, LIST_SIZE * sizeof(Rectangle));
+    int GetStepCount(Rectangle* items) {
+        Rectangle* array = CopyArray(items);
 
         int temp;
         int stepCount = 0;
@@ -69,15 +67,14 @@ namespace CocktailSort {
         return stepCount;
     }
 
-    SortSequence GetSequence_CocktailSort(Rectangle* items) {
-        // INITIALLY RUN THE COCKTAIL SORT CALCULATING THE TOTAL NUMBER OF STEPS
-        int stepCount = GetStepCount_CocktailSort(items);
+    SortSequence GetSequence(Rectangle* items) {
+        Rectangle* array = CopyArray(items);
+
+        // INITIALLY RUN THE SORT TO CALCULATE THE TOTAL NUMBER OF STEPS
+        int stepCount = GetStepCount(items);
 
         SortSequence sort = create_sort_sequence(stepCount);
         sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
-
-        Rectangle* array = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
-        memcpy(array, items, LIST_SIZE * sizeof(Rectangle));
 
         int currentStep = 0;
         int temp, offset;
@@ -101,7 +98,7 @@ namespace CocktailSort {
                         offset = (currentStep * LIST_SIZE) + i;
                         sort.steps[offset].value = array[i].value;
 
-                        // SET RECTANGLE COLOR
+                        // SET RECTANGLE COLOR VALUE
                         bool isOrdered = i > end || i < start;
                         bool isCurrent = i == index;
                         bool isChecking = i == (index + 1);
@@ -134,8 +131,8 @@ namespace CocktailSort {
 
                         // SET RECTANGLE COLOR
                         bool isOrdered = i > end || i < start;
-                        bool isCurrent = i == index;
-                        bool isChecking = i == (index + 1);
+                        bool isCurrent = i == (index + 1);
+                        bool isChecking = i == index;
                         sort.steps[offset].rect_color = GetRectangleColor(isOrdered, isCurrent, isChecking);
                     }
                     currentStep++;
