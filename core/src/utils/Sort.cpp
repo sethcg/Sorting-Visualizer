@@ -5,6 +5,7 @@
 
 #include <BubbleSort.hpp>
 #include <CocktailSort.hpp>
+#include <HeapSort.hpp>
 
 SortSequence GetSortSequence(int sortId, Rectangle* items) {
     switch(sortId) {
@@ -13,8 +14,7 @@ SortSequence GetSortSequence(int sortId, Rectangle* items) {
         case 1:
             return CocktailSort::GetSequence(items);
         case 2:
-            SDL_Log("Start Heap Sort...");
-            break;
+            return HeapSort::GetSequence(items);
         case 3:
             SDL_Log("Start Insertion Sort...");
             break;
