@@ -9,7 +9,7 @@
 
 namespace HeapSort {
 
-    void GetHeapifyCount(Rectangle* array, int size, int index, int stepCount) {
+    void GetHeapifyCount(Rectangle* array, int size, int index, int* stepCount) {
         int largest = index;
         
         // IF LEFT CHILD IS LARGER, SET AS LARGEST
@@ -29,7 +29,7 @@ namespace HeapSort {
             Swap(array, index, largest);
 
             // INCREMENT STEP COUNTER
-            stepCount++;
+            (*stepCount)++;
 
             // RECURSIVELY HEAPIFY THE AFFECTED SUB-TREE
             GetHeapifyCount(array, size, largest, stepCount);
@@ -39,7 +39,7 @@ namespace HeapSort {
     int GetStepCount(Rectangle* items) {
         Rectangle* array = CopyArray(items);
         
-        int stepCount = 0;
+        int* stepCount = (int*) calloc(1, sizeof(int));
 
         // BUILD INITIAL HEAP
         for (int i = LIST_SIZE / 2 - 1; i >= 0; i--) {
@@ -52,20 +52,21 @@ namespace HeapSort {
             Swap(array, 0, i);
 
             // INCREMENT THE STEP COUNTER
-            stepCount++;
+            (*stepCount)++;
 
             // CALL HEAPIFY ON THE REDUCED SIZE HEAP
             GetHeapifyCount(array, i, 0, stepCount);
         }
 
         // INCREMENT FOR FINAL STEP
-        stepCount++; 
+        (*stepCount)++;
 
         free(array);
-        return stepCount;
+        int test = stepCount[0];
+        return stepCount[0];
     }
 
-    void Heapify(Rectangle* array, int size, int index, int currentStep, SortSequence sort) {
+    void Heapify(Rectangle* array, int size, int index, int* currentStep, SortSequence sort) {
         int largest = index;
                 
         // IF LEFT CHILD IS LARGER, SET AS LARGEST
@@ -87,15 +88,14 @@ namespace HeapSort {
             // RECORD THE SORTING STEP (SNAPSHOT OF THE ARRAY)
             int offset;
             for (int i = 0; i < LIST_SIZE; i++) {
-                offset = (currentStep * LIST_SIZE) + i;
+                offset = ((*currentStep) * LIST_SIZE) + i;
                 sort.steps[offset].value = array[i].value;
-                sort.steps[offset].rect_color = rect_base_color;
-
-                // TODO: ADD COLOR FOR HEAP SORT
-                // bool isOrdered = i >= (LIST_SIZE - index);
-                // sort.steps[offset].rect_color = GetRectangleColor(isOrdered, false, false);
+                
+                // SET RECTANGLE COLOR VALUE
+                bool isOrdered = i >= size;
+                sort.steps[offset].rect_color = GetRectangleColor(isOrdered, false, false);
             }
-            currentStep++;
+            (*currentStep)++;
 
             // RECURSIVELY HEAPIFY THE AFFECTED SUB-TREE
             Heapify(array, size, largest, currentStep, sort);
@@ -112,7 +112,7 @@ namespace HeapSort {
         sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
 
         int offset;
-        int currentStep = 0;
+        int* currentStep = (int*) calloc(1, sizeof(int));
 
         // BUILD INITIAL HEAP
         for (int index = LIST_SIZE / 2 - 1; index >= 0; index--) {
@@ -126,15 +126,14 @@ namespace HeapSort {
 
             // RECORD THE SORTING STEP (SNAPSHOT OF THE ARRAY)
             for (int i = 0; i < LIST_SIZE; i++) {
-                offset = (currentStep * LIST_SIZE) + i;
+                offset = (currentStep[0] * LIST_SIZE) + i;
                 sort.steps[offset].value = array[i].value;
-                sort.steps[offset].rect_color = rect_base_color;
 
-                // TODO: ADD COLOR FOR HEAP SORT
-                // bool isOrdered = i >= (LIST_SIZE - index);
-                // sort.steps[offset].rect_color = GetRectangleColor(isOrdered, false, false);
+                // SET RECTANGLE COLOR VALUE
+                bool isOrdered = i >= index;
+                sort.steps[offset].rect_color = GetRectangleColor(isOrdered, false, false);
             }
-            currentStep++;
+            (*currentStep)++;
             
             // CALL HEAPIFY ON THE REDUCED SIZE HEAP
             Heapify(array, index, 0, currentStep, sort);
@@ -142,12 +141,9 @@ namespace HeapSort {
 
         // RECORD FINAL STEP (ORDERED LIST)
         for (int i = 0; i < LIST_SIZE; i++) {
-            offset = (currentStep * LIST_SIZE) + i;
+            offset = (currentStep[0] * LIST_SIZE) + i;
             sort.steps[offset].value = array[i].value;
-            sort.steps[offset].rect_color = rect_base_color;
-
-            // TODO: ADD COLOR FOR HEAP SORT
-            // sort.steps[offset].rect_color = rect_green_color;
+            sort.steps[offset].rect_color = rect_green_color;
         }
 
         free(array);

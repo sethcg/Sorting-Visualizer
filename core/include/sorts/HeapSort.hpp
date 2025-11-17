@@ -8,11 +8,11 @@
 
 namespace HeapSort {
 
-    void GetHeapifyCount(Rectangle* array, int size, int index, int stepCount);
+    void GetHeapifyCount(Rectangle* array, int size, int index, int* stepCount);
 
     int GetStepCount(Rectangle* items);
 
-    void Heapify(Rectangle* array, int size, int index, int currentStep, SortSequence sort);
+    void Heapify(Rectangle* array, int size, int index, int currentStep, SortSequence* sort);
 
     SortSequence GetSequence(Rectangle* items);
 
