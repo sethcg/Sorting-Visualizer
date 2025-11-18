@@ -14,7 +14,6 @@ namespace BubbleSort {
 
         int stepCount = 1;
 
-        int temp;
         bool swapped;
         for (int i = 0; i < LIST_SIZE - 1; i++) {
             swapped = false;
@@ -44,7 +43,7 @@ namespace BubbleSort {
         sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
 
         int currentStep = 0;
-        int temp, offset;
+        int offset;
         bool swapped;
         for (int index = 0; index < LIST_SIZE - 1; index++) {
             swapped = false;

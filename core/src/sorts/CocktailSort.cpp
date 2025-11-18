@@ -12,7 +12,6 @@ namespace CocktailSort {
     int GetStepCount(Rectangle* items) {
         Rectangle* array = CopyArray(items);
 
-        int temp;
         int stepCount = 0;
 
         bool swapped = true;
@@ -76,8 +75,8 @@ namespace CocktailSort {
         SortSequence sort = create_sort_sequence(stepCount);
         sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
 
+        int offset;
         int currentStep = 0;
-        int temp, offset;
 
         bool swapped = true;
         int start = 0;

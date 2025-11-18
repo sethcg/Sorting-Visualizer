@@ -62,7 +62,6 @@ namespace HeapSort {
         (*stepCount)++;
 
         free(array);
-        int test = stepCount[0];
         return stepCount[0];
     }
 
