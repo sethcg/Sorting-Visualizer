@@ -9,8 +9,6 @@
 
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
-#define rect_red_color rgb_color { .r = 200, .g = 60, .b = 40 }
-
 namespace MergeSort {
 
     rgb_color GetRectangleColor(bool isSelected, bool inGrouping) {
@@ -72,7 +70,7 @@ namespace MergeSort {
         (*stepCount)++;
     }
     
-    int GetMergeSortCount(Rectangle* items) {
+    int GetStepCount(Rectangle* items) {
         int* stepCount = (int*) calloc(1, sizeof(int));
         
         // COPY ARRAY TO AVOID CHANGING UNDERLYING DATA
@@ -171,7 +169,7 @@ namespace MergeSort {
         Rectangle* array = CopyArray(items);
 
         // RUN THE SORT TO CALCULATE THE TOTAL NUMBER OF STEPS
-        int stepCount = GetMergeSortCount(items);
+        int stepCount = GetStepCount(items);
 
         SortSequence sort = create_sort_sequence(stepCount);
         sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));

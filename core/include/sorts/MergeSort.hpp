@@ -12,7 +12,7 @@ namespace MergeSort {
 
     void GetMergeCount(Rectangle* array, int left, int middle, int right, int* stepCount);
 
-    int GetMergeSortCount(Rectangle* array);
+    int GetStepCount(Rectangle* array);
 
     void Merge(Rectangle* array, int left, int middle, int right, int* currentStep, SortSequence sort, int currentSize);
 

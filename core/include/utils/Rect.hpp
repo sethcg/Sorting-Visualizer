@@ -10,6 +10,7 @@ typedef struct {
 #define rect_base_color rgb_color { .r = 50, .g = 50, .b = 50 }
 
 // OTHER COLORS TO BETTER DISTINGUISH THE SORTING PROCESS
+#define rect_red_color rgb_color { .r = 200, .g = 60, .b = 40 }
 #define rect_green_color rgb_color { .r = 0, .g = 150, .b = 75 }
 #define rect_blue_color rgb_color { .r = 0, .g = 120, .b = 160 }
 #define rect_orange_color rgb_color { .r = 200, .g = 120, .b = 0 }
