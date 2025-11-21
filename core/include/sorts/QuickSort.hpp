@@ -8,7 +8,7 @@
 
 namespace QuickSort {
 
-    rgb_color GetRectangleColor(bool isPivot, bool isSelected);
+    rgb_color GetRectangleColor(bool isOrdered, bool isPivot, bool isSelected);
 
     int GetPartitionCount(Rectangle* array, int low, int high, int* stepCount);
 
@@ -16,7 +16,7 @@ namespace QuickSort {
 
     int GetStepCount(Rectangle* items);
 
-    int Partition(Rectangle* array, int low, int high);
+    int Partition(Rectangle* array, int low, int high, int* currentStep, SortSequence sort);
 
     void QuickSort(Rectangle* array, int low, int high, int* currentStep, SortSequence sort);
 

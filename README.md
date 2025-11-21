@@ -35,16 +35,16 @@ ctest --preset default
 ```bash
 
 # GET LINE COUNT (REQUIRES CLOC TO BE INSTALLED)
-cloc --include-lang=C++,"C/C++ Header",CMake --exclude-dir=build,vcpkg .
+cloc --include-lang=C++,"C/C++ Header",CMake --exclude-dir=build,vcpkg --out=line-count.txt .
 
 ```
 
 | Language         | Files | Blank | Comment | Code |
 |:-----------------|:-----:|:-----:|:-------:|:----:|
-| **C++**          | 15    | 287   | 150     | 890  |
-| **C/C++ Header** | 11    | 80    | 1       | 156  |
+| **C++**          | 17    | 336   | 182     | 1018 |
+| **C/C++ Header** | 12    | 92    | 1       | 171  |
 | **CMake**        | 4     | 24    | 19      | 63   |
 |                                                   |
-| **Total**        | 30    | 391   | 170     | 1109 |
+| **Total**        | 33    | 452   | 202     | 1252 |
 
 </details>
