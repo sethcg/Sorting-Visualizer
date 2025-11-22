@@ -102,7 +102,6 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         ResizeList(appContext->renderer, appContext->items, appContext->width, appContext->height);
     }
 
-    // TODO: ADD SORT FUNCTIONALITY WHEN THIS IS PRESSED
     if (ImGui::Button("Sort", ImVec2(120, 20))) {
         if(!appContext->isSorting) {
             appContext->sequence = GetSortSequence(appContext->sortId, appContext->items);
@@ -111,7 +110,6 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         }
     }
 
-    // TODO: FIX THIS TO SET THE SORTING ALGORITHM
     ImGui::SetNextItemWidth(120);
     if(ImGui::BeginCombo("##Select_Sort", sortOptions[appContext->sortId], ImGuiComboFlags_NoArrowButton)) {
         for(int i = 0; i < sizeof(sortOptions) / sizeof(char*); i++) {

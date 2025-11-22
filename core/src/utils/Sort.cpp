@@ -10,6 +10,7 @@
 #include <MergeSort.hpp>
 #include <QuickSort.hpp>
 #include <RadixSort.hpp>
+#include <SelectionSort.hpp>
 
 SortSequence GetSortSequence(int sortId, Rectangle* items) {
     switch(sortId) {
@@ -28,8 +29,7 @@ SortSequence GetSortSequence(int sortId, Rectangle* items) {
         case 6:
             return RadixSort::GetSequence(items);
         case 7:
-            SDL_Log("Start Selection Sort...");
-            break;
+            return SelectionSort::GetSequence(items);
     }
     return { };
 }

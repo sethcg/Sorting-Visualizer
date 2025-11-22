@@ -2,15 +2,20 @@
 
 ### Description:
 
-### Preview:
+<details closed>
+<summary><b>Tooling</b></summary>
+<br/>
 
-### Tooling:
 - [x] C++ Language
 - [x] SDL3
 - [x] ImGui
 - [x] Google Test
 - [x] Vcpkg
 - [x] CMake
+
+</details>
+
+### Preview:
 
 ---
 ### Developer Notes:
@@ -41,10 +46,10 @@ cloc --include-lang=C++,"C/C++ Header",CMake --exclude-dir=build,vcpkg --out=lin
 
 | Language         | Files | Blank | Comment | Code |
 |:-----------------|:-----:|:-----:|:-------:|:----:|
-| **C++**          | 19    | 385   | 213     | 1150 |
-| **C/C++ Header** | 13    | 104   | 1       | 186  |
+| **C++**          | 21    | 424   | 227     | 1253 |
+| **C/C++ Header** | 14    | 112   | 1       | 197  |
 | **CMake**        | 4     | 24    | 19      | 63   |
 |                                                   |
-| **Total**        | 36    | 513   | 233     | 1399 |
+| **Total**        | 39    | 560   | 247     | 1513 |
 
 </details>
