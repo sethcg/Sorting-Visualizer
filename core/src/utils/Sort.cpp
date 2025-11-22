@@ -9,6 +9,7 @@
 #include <InsertionSort.hpp>
 #include <MergeSort.hpp>
 #include <QuickSort.hpp>
+#include <RadixSort.hpp>
 
 SortSequence GetSortSequence(int sortId, Rectangle* items) {
     switch(sortId) {
@@ -25,8 +26,7 @@ SortSequence GetSortSequence(int sortId, Rectangle* items) {
         case 5:
             return QuickSort::GetSequence(items);
         case 6:
-            SDL_Log("Start Radix Sort...");
-            break;
+            return RadixSort::GetSequence(items);
         case 7:
             SDL_Log("Start Selection Sort...");
             break;
