@@ -2,20 +2,51 @@
 
 ### Description:
 
-<details closed>
-<summary><b>Tooling</b></summary>
-<br/>
+<dl>
+  <dd>
+    This is a C++ application that implements various <a href="https://en.wikipedia.org/wiki/Sorting_algorithm">sorting algorithms</a> 
+    using colors and shapes to represent how the underlying data structure is changing.
+  </dd>
+</dl>
 
-- [x] C++ Language
-- [x] SDL3
-- [x] ImGui
-- [x] Google Test
-- [x] Vcpkg
-- [x] CMake
+<dl>
+  <dd>
+  <details closed>
+  <summary><b>Time Complexity</b></summary>
 
-</details>
+  | Name       | Best               | Average            | Worst              |
+  |:-----------|:-------------------|:-------------------|:-------------------|
+  | Bubble     | O(n)               | O(n<sup>2</sup>)   | O(n<sup>2</sup>)   |
+  | Cocktail   | O(n)               | O(n<sup>2</sup>)   | O(n<sup>2</sup>)   |
+  | Heap       | O(n log(n))        | O(n log(n))        | O(n log(n))        |
+  | Insertion  | O(n)               | O(n<sup>2</sup>)   | O(n<sup>2</sup>)   |
+  | Merge      | O(n log(n))        | O(n log(n))        | O(n log(n))        |
+  | Quick      | O(n log(n))        | O(n log(n))        | O(n<sup>2</sup>)   |
+  | Radix      | O(nk)              | O(nk)              | O(nk)              |
+  | Selection  | O(n<sup>2</sup>)   | O(n<sup>2</sup>)   | O(n<sup>2</sup>)   |
+
+  </details>
+  </dd>
+</dl>
 
 ### Preview:
+
+<details open>
+  <summary>Show</summary>
+  <img width="598px" height="600px" src="https://github.com/user-attachments/assets/53180fca-318b-4c76-9f2f-363413b2bc00" alt="image">
+
+
+  <br>
+</details>
+
+### Tooling:
+
+  - [x] C++ Language
+  - [x] SDL3
+  - [x] ImGui
+  - [x] Google Test
+  - [x] Vcpkg
+  - [x] CMake
 
 ---
 ### Developer Notes:
