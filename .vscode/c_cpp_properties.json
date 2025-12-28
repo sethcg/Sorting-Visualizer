@@ -8,15 +8,11 @@
                 "${workspaceFolder}\\build\\default\\_deps\\**",
                 "${workspaceFolder}\\build\\default\\vcpkg_installed\\x64-windows\\include\\**"
             ],
-            "defines": [
-                "__WXMSW__",
-                "_UNICODE",
-                "_DEBUG"
-            ],
+            "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
             "compilerPath": "cl.exe",
             "cStandard": "c23",
             "cppStandard": "c++23",
-            "intelliSenseMode": "windows-msvc-x64",
+            "intelliSenseMode": "msvc-x64",
             "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],

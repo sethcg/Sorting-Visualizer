@@ -41,7 +41,6 @@
 
 ### Tooling:
 
-  - [x] C++ Language
   - [x] SDL3
   - [x] ImGui
   - [x] Google Test
@@ -56,11 +55,12 @@
 # CONFIGURE
 cmake --preset default
 
-# BUILD
-cmake --build --preset default
+# BUILD DEBUG (RUN TESTS)
+cmake --build --preset debug
+ctest --preset debug
 
-# RUN TESTS
-ctest --preset default
+# BUILD RELEASE
+cmake --build --preset release
 
 ```
 

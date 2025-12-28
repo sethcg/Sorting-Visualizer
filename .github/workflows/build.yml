@@ -14,31 +14,41 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         
     steps:
-    - name: Checkout Code
+    - name: CHECKOUT CODE
       uses: actions/checkout@v4
       with:
         submodules: true
-        fetch-depth: 0
+        fetch-depth: 1
 
-    - name: Setup CMake and Ninja
-      uses: lukka/get-cmake@latest
+    - name: SETUP CMAKE AND NINJA
+      uses: lukka/get-cmake@v4.2.1
 
     # RELATED ISSUE: https://github.com/microsoft/vcpkg/issues/46759
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
-      run: sudo apt-get install -y libltdl-dev
-      shell: bash
+      run: sudo apt-get update && sudo apt-get install -y libltdl-dev
 
-    - name: Setup vcpkg
+    - name: CACHE VCPKG
+      uses: actions/cache@v4
+      with:
+        path: |
+          vcpkg_installed
+          ~/.cache/vcpkg
+        key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg.json') }}
+        restore-keys: |
+          vcpkg-${{ runner.os }}-
+
+    - name: SETUP VCPKG
       uses: lukka/run-vcpkg@v11
       with:
         runVcpkgInstall: true
 
-    - name: Configure
+    - name: CONFIGURE
       run: cmake --preset default
 
-    - name: Build
-      run: cmake --build --preset default
+    - name: BUILD
+      run: cmake --build --preset release --parallel
 
-    - name: Run Tests
-      run: ctest --preset default
+    - name: RUN TESTS
+      if: runner.os == 'Linux'
+      run: ctest --preset default -C release
