@@ -14,7 +14,7 @@ TEST(MergeSort_Test, GetStepCount_GreaterThanOne) {
     SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
 
-    CreateList(renderer, items, WINDOW_WIDTH, WINDOW_HEIGHT);
+    CreateList(items, WINDOW_WIDTH, WINDOW_HEIGHT);
     ShuffleList(items);
 
     // ACT
@@ -29,7 +29,7 @@ TEST(MergeSort_Test, GetSequence_CorrectOrder) {
     SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
 
-    CreateList(renderer, items, WINDOW_WIDTH, WINDOW_HEIGHT);
+    CreateList(items, WINDOW_WIDTH, WINDOW_HEIGHT);
     ShuffleList(items);
 
     // ACT

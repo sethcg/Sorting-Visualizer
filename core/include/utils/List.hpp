@@ -10,9 +10,9 @@
 #define LIST_MARGIN_MINIMUM 24
 #define LIST_RECT_PADDING 2
 
-void CreateList(SDL_Renderer *renderer, Rectangle* items, int window_width, int window_height);
+void CreateList(Rectangle* items, int window_width, int window_height);
 
-void ResizeList(SDL_Renderer *renderer, Rectangle* items, int window_width, int window_height);
+void ResizeList(Rectangle* items, int window_width, int window_height);
 
 void ShuffleList(Rectangle* items);
 

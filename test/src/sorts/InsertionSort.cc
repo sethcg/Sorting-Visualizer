@@ -14,7 +14,7 @@ TEST(InsertionSort_Test, GetStepCount_ListSize) {
     SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
 
-    CreateList(renderer, items, WINDOW_WIDTH, WINDOW_HEIGHT);
+    CreateList(items, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     // ACT
     int stepCount = GetStepCount(items);
@@ -28,7 +28,7 @@ TEST(InsertionSort_Test, GetStepCount_GreaterThanOne) {
     SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
 
-    CreateList(renderer, items, WINDOW_WIDTH, WINDOW_HEIGHT);
+    CreateList(items, WINDOW_WIDTH, WINDOW_HEIGHT);
     ShuffleList(items);
 
     // ACT
@@ -43,7 +43,7 @@ TEST(InsertionSort_Test, GetSequence_CorrectOrder) {
     SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
 
-    CreateList(renderer, items, WINDOW_WIDTH, WINDOW_HEIGHT);
+    CreateList(items, WINDOW_WIDTH, WINDOW_HEIGHT);
     ShuffleList(items);
 
     // ACT

@@ -3,7 +3,7 @@
 #include <List.hpp>
 #include <Rect.hpp>
 
-void CreateList(SDL_Renderer *renderer, Rectangle* items, int window_width, int window_height) {
+void CreateList(Rectangle* items, int window_width, int window_height) {
     int drawable_width = window_width - (LIST_MARGIN_MINIMUM * 2);
 
     int height_offset = ((window_height - (LIST_MARGIN_MINIMUM * 2)) / 10);
@@ -24,7 +24,7 @@ void CreateList(SDL_Renderer *renderer, Rectangle* items, int window_width, int 
     }
 }
 
-void ResizeList(SDL_Renderer *renderer, Rectangle* items, int window_width, int window_height) {
+void ResizeList(Rectangle* items, int window_width, int window_height) {
     int drawable_width = window_width - (LIST_MARGIN_MINIMUM * 2);
 
     int height_offset = ((window_height - (LIST_MARGIN_MINIMUM * 2)) / 10);

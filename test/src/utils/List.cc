@@ -12,7 +12,7 @@ TEST(List_Test, CreateList_ValueAssigned) {
     Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
 
     // ACT
-    CreateList(renderer, items, WINDOW_WIDTH, WINDOW_HEIGHT);
+    CreateList(items, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     // ASSERT
     for (int i = 0; i < LIST_SIZE; i++) {
