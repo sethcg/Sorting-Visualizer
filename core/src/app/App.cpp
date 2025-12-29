@@ -31,14 +31,7 @@ namespace Application {
         if (!CreateWindowAndRenderer("Sorting Visualizer")) return SDL_APP_FAILURE;
 
         srand(time(NULL));
-
-        // SETUP APP STATE
-        appContext.items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
-        appContext.sortId = 0;
-        appContext.isSorting = false;
-        appContext.lastTime = 0;
-        appContext.delayInMilliseconds = DEFAULT_SORTING_DELAY_MILLISECONDS;
-        appContext.stepIndex = 0;
+        appContext.items = std::make_unique<Rectangle[]>(LIST_SIZE);
 
         // SETUP IMGUI
         IMGUI_CHECKVERSION();
@@ -55,7 +48,7 @@ namespace Application {
         SDL_SetWindowMinimumSize(window, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
 
         // CREATE LIST AND CALCULATE INITIAL WIDTH/HEIGHT OF RECTANGLES
-        CreateList(appContext.items, width, height);
+        CreateList(appContext.items.get(), width, height);
 
         return SDL_APP_CONTINUE;
     }
@@ -69,39 +62,36 @@ namespace Application {
                 height = event->window.data2;
                 break;
         }
-
         ImGui_ImplSDL3_ProcessEvent(event);
         return SDL_APP_CONTINUE;
     }
 
     void App::RenderScene(float deltaTime) {
-        // RENDERING EACH SORT'S ITERATION
-        if(appContext.isSorting) {
-            // DELAY ITERATING THE SORTING STEP
-            static SDL_Time current = 0;
-            SDL_GetCurrentTime(&current);
-            int currentTime = abs((int) SDL_NS_TO_MS(current));
-            int elapsedTime = abs(currentTime - appContext.lastTime);
-            if(elapsedTime > appContext.delayInMilliseconds) {
-                if(IncrementStep(appContext.stepIndex, appContext.sequence, appContext.items)) {
+        Rectangle* items = appContext.items.get();
+
+        if (appContext.isSorting) {
+            appContext.elapsedTime += deltaTime;
+
+            if (appContext.elapsedTime >= appContext.delayTime) {
+                if (IncrementStep(appContext.stepIndex, appContext.sequence.get(), items)) {
                     appContext.isSorting = false;
-                    appContext.lastTime = 0;
                     appContext.stepIndex = 0;
                 } else {
-                    appContext.lastTime = currentTime;
                     appContext.stepIndex++;
                 }
-                ResizeList(appContext.items, width, height);
+                appContext.elapsedTime = 0.0f;
             }
         }
-        DrawList(renderer, appContext.items);
+
+        // RENDER LIST (EACH FRAME)
+        DrawList(renderer, items, width, height);
     }
 
     SDL_AppResult App::Frame() {
         // UPDATE DELTA TIME
         uint64_t currentTime = SDL_GetPerformanceCounter();
-        float deltaTime = float(currentTime - lastTime) / SDL_GetPerformanceFrequency();
-        lastTime = currentTime;
+        float deltaTime = float(currentTime - lastFrameTime) / SDL_GetPerformanceFrequency();
+        lastFrameTime = currentTime;
 
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
@@ -121,12 +111,6 @@ namespace Application {
     }
 
     void App::Shutdown() {
-        // CLEANUP ALLOCATED MEMORY
-        if (appContext.items) {
-            free(appContext.items);
-            appContext.items = nullptr;
-        }
-
         ImGui_ImplSDLRenderer3_Shutdown();
         ImGui_ImplSDL3_Shutdown();
         ImGui::DestroyContext();

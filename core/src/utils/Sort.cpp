@@ -1,3 +1,7 @@
+#include <array>
+#include <functional>
+#include <memory>
+
 #include <SDL3/SDL.h>
 
 #include <Rect.hpp>
@@ -12,31 +16,26 @@
 #include <RadixSort.hpp>
 #include <SelectionSort.hpp>
 
-SortSequence GetSortSequence(int sortId, Rectangle* items) {
-    switch(sortId) {
-        case 0:
-            return BubbleSort::GetSequence(items);
-        case 1:
-            return CocktailSort::GetSequence(items);
-        case 2:
-            return HeapSort::GetSequence(items);
-        case 3:
-            return InsertionSort::GetSequence(items);
-        case 4:
-            return MergeSort::GetSequence(items);
-        case 5:
-            return QuickSort::GetSequence(items);
-        case 6:
-            return RadixSort::GetSequence(items);
-        case 7:
-            return SelectionSort::GetSequence(items);
+void UpdateSequence(int sortId, Rectangle* items, SortSequence* sequence) {
+    static const std::array<std::function<void(Rectangle*, SortSequence*)>, 8> sorts = {
+        BubbleSort::SetSequence,
+        CocktailSort::SetSequence,
+        HeapSort::SetSequence,
+        InsertionSort::SetSequence,
+        MergeSort::SetSequence,
+        QuickSort::SetSequence,
+        RadixSort::SetSequence,
+        SelectionSort::SetSequence
+    };
+
+    if (sortId >= 0 && sortId < static_cast<int>(sorts.size())) {
+        sorts[sortId](items, sequence);
     }
-    return { };
 }
 
-bool IncrementStep(int stepIndex, SortSequence sequence, Rectangle* items) {
+bool IncrementStep(int stepIndex, SortSequence* sequence, Rectangle* items) {
     // RETURN TRUE WHEN SORT IS COMPLETE
-    if(stepIndex >= sequence.stepCount) {
+    if(stepIndex >= sequence->stepCount) {
         return true;
     }
 
@@ -44,8 +43,8 @@ bool IncrementStep(int stepIndex, SortSequence sequence, Rectangle* items) {
     int offset;
     for (int i = 0; i < LIST_SIZE; i++) {
         offset = (stepIndex * LIST_SIZE) + i;
-        items[i].value = sequence.steps[offset].value;
-        items[i].rect_color = sequence.steps[offset].rect_color;
+        items[i].value = sequence->steps[offset].value;
+        items[i].rect_color = sequence->steps[offset].rect_color;
     }
     return false;
 }

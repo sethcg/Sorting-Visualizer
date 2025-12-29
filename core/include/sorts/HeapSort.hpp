@@ -12,9 +12,9 @@ namespace HeapSort {
 
     int GetStepCount(Rectangle* items);
 
-    void Heapify(Rectangle* array, int size, int index, int* currentStep, SortSequence sort);
+    void Heapify(Rectangle* array, int size, int index, int* currentStep, SortSequence* sort);
 
-    SortSequence GetSequence(Rectangle* items);
+    void SetSequence(Rectangle* items, SortSequence* sequence);
 
 }
 

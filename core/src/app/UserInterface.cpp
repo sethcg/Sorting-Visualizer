@@ -18,23 +18,33 @@ namespace UserInterface {
     };
 
     void RenderGUI(Application::AppContext* appContext, int width, int height) {
+        Rectangle* items = appContext->items.get();
+
         ImGui::SetNextWindowSize(ImVec2(136, 0));
         ImGui::SetNextWindowPos(ImVec2(24, 24), ImGuiCond_Once);
         ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_NoCollapse);
 
         if (ImGui::Button("Shuffle", ImVec2(120, 20))) {
             appContext->isSorting = false;
-            appContext->lastTime = 0;
+            appContext->elapsedTime = 0.0f;
             appContext->stepIndex = 0;
-            ShuffleList(appContext->items);
-            ResizeList(appContext->items, width, height);
+            ShuffleList(items);
         }
 
         if (ImGui::Button("Sort", ImVec2(120, 20))) {
-            if(!appContext->isSorting) {
-                appContext->sequence = GetSortSequence(appContext->sortId, appContext->items);
-                appContext->stepIndex = 0;
-                appContext->isSorting = true;
+            if (!appContext->isSorting) {
+                try {
+                    appContext->sequence = std::make_unique<SortSequence>();
+                    UpdateSequence(appContext->sortId, items, appContext->sequence.get());
+                    appContext->stepIndex = 0;
+                    appContext->isSorting = true;
+                } 
+                catch (const std::exception& e) {
+                    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create sort sequence: %s", e.what());
+                }
+                catch (...) {
+                    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unknown error occurred while creating sort sequence.");
+                }
             }
         }
 

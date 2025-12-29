@@ -44,7 +44,7 @@ namespace Application {
             SDL_Renderer* renderer = nullptr;
 
             float deltaTime = 0.0f;
-            uint64_t lastTime = 0;
+            float lastFrameTime = 0.0f;
     };
 
 }

@@ -33,14 +33,12 @@ namespace BubbleSort {
         return stepCount;
     }
 
-    SortSequence GetSequence(Rectangle* items) {
+    void SetSequence(Rectangle* items, SortSequence* sequence) {
         Rectangle* array = CopyArray(items);
 
         // INITIALLY RUN THE SORT TO CALCULATE THE TOTAL NUMBER OF STEPS
-        int stepCount = GetStepCount(items);
-
-        SortSequence sort = create_sort_sequence(stepCount);
-        sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
+        sequence->stepCount = GetStepCount(items);
+        sequence->steps = (SortStep*) malloc(LIST_SIZE * sequence->stepCount * sizeof(SortStep));
 
         int currentStep = 0;
         int offset;
@@ -55,13 +53,13 @@ namespace BubbleSort {
                     // RECORD THE SORTING STEP (SNAPSHOT OF THE ARRAY)
                     for (int i = 0; i < LIST_SIZE; i++) {
                         offset = (currentStep * LIST_SIZE) + i;
-                        sort.steps[offset].value = array[i].value;
+                        sequence->steps[offset].value = array[i].value;
 
                         // SET RECTANGLE COLOR VALUE
                         bool isOrdered = i >= (LIST_SIZE - index);
                         bool isCurrent = i == j;
                         bool isChecking = i == (j + 1);
-                        sort.steps[offset].rect_color = GetRectangleColor(isOrdered, isCurrent, isChecking);
+                        sequence->steps[offset].rect_color = GetRectangleColor(isOrdered, isCurrent, isChecking);
                     }
                     currentStep++;
                 }
@@ -74,12 +72,10 @@ namespace BubbleSort {
         // RECORD FINAL STEP (ORDERED LIST)
         for (int i = 0; i < LIST_SIZE; i++) {
             offset = (currentStep * LIST_SIZE) + i;
-            sort.steps[offset].value = array[i].value;
-            sort.steps[offset].rect_color = rect_green_color;
+            sequence->steps[offset].value = array[i].value;
+            sequence->steps[offset].rect_color = rect_green_color;
         }
-
         free(array);
-        return sort;
     }
 
 }

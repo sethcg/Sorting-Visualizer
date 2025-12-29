@@ -16,8 +16,8 @@ void ResizeList(Rectangle* items, int window_width, int window_height);
 
 void ShuffleList(Rectangle* items);
 
-void DrawList(SDL_Renderer *renderer, Rectangle* items);
+void DrawList(SDL_Renderer *renderer, Rectangle* items, int window_width, int window_height);
 
-static void DrawRect(SDL_Renderer *renderer, Rectangle* items, int index);
+void DrawRect(SDL_Renderer *renderer, Rectangle* items, int index);
 
 #endif

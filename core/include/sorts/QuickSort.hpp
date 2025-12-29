@@ -16,11 +16,11 @@ namespace QuickSort {
 
     int GetStepCount(Rectangle* items);
 
-    int Partition(Rectangle* array, int low, int high, int* currentStep, SortSequence sort);
+    int Partition(Rectangle* array, int low, int high, int* currentStep, SortSequence* sequence);
 
-    void QuickSort(Rectangle* array, int low, int high, int* currentStep, SortSequence sort);
+    void QuickSort(Rectangle* array, int low, int high, int* currentStep, SortSequence* sequence);
 
-    SortSequence GetSequence(Rectangle* items);
+    void SetSequence(Rectangle* items, SortSequence* sequence);
 
 }
 

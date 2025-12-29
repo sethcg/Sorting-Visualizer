@@ -10,7 +10,7 @@ namespace CocktailSort {
 
     int GetStepCount(Rectangle* items);
 
-    SortSequence GetSequence(Rectangle* items);
+    void SetSequence(Rectangle* items, SortSequence* sequence);
 
 }
 

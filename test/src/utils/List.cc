@@ -1,5 +1,6 @@
+#include <memory>
+
 #include <gtest/gtest.h>
-#include <SDL3/SDL.h>
 
 #include <TestUtils.hpp>
 
@@ -8,8 +9,8 @@
 
 TEST(List_Test, CreateList_ValueAssigned) {
     // ARRANGE
-    SDL_Renderer* renderer = (SDL_Renderer*) malloc(sizeof(Rectangle));
-    Rectangle* items = (Rectangle*) malloc(LIST_SIZE * sizeof(Rectangle));
+    std::unique_ptr<Rectangle[]> itemPtr = std::make_unique<Rectangle[]>(LIST_SIZE);
+    Rectangle* items = itemPtr.get();
 
     // ACT
     CreateList(items, WINDOW_WIDTH, WINDOW_HEIGHT);

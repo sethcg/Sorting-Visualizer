@@ -45,14 +45,12 @@ namespace SelectionSort {
         return stepCount;
     }
 
-    SortSequence GetSequence(Rectangle* items) {
+    void SetSequence(Rectangle* items, SortSequence* sequence) {
         Rectangle* array = CopyArray(items);
 
         // INITIALLY RUN THE SORT TO CALCULATE THE TOTAL NUMBER OF STEPS
-        int stepCount = GetStepCount(items);
-
-        SortSequence sort = create_sort_sequence(stepCount);
-        sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
+        sequence->stepCount = GetStepCount(items);
+        sequence->steps = (SortStep*) malloc(LIST_SIZE * sequence->stepCount * sizeof(SortStep));
 
         int currentStep = 0;
         int offset;
@@ -66,13 +64,13 @@ namespace SelectionSort {
                 // RECORD THE SORTING STEP (COMPARE)
                 for (int index = 0; index < LIST_SIZE; index++) {
                     offset = (currentStep * LIST_SIZE) + index;
-                    sort.steps[offset].value = array[index].value;
+                    sequence->steps[offset].value = array[index].value;
 
                     // SET RECTANGLE COLOR VALUE
                     bool isOrdered = index < i;
                     bool isMinimum = index == minimum_index;
                     bool isSelected = index == j;
-                    sort.steps[offset].rect_color = GetRectangleColor(isOrdered, isMinimum, isSelected);
+                    sequence->steps[offset].rect_color = GetRectangleColor(isOrdered, isMinimum, isSelected);
                 }
                 currentStep++;
 
@@ -86,13 +84,13 @@ namespace SelectionSort {
             // RECORD THE SORTING STEP (SWAP)
             for (int index = 0; index < LIST_SIZE; index++) {
                 offset = (currentStep * LIST_SIZE) + index;
-                sort.steps[offset].value = array[index].value;
+                sequence->steps[offset].value = array[index].value;
 
                 // SET RECTANGLE COLOR VALUE
                 bool isOrdered = index < i;
                 bool isMinimum = index == minimum_index;
                 bool isSelected = index == i;
-                sort.steps[offset].rect_color = GetRectangleColor(isOrdered, isMinimum, isSelected);
+                sequence->steps[offset].rect_color = GetRectangleColor(isOrdered, isMinimum, isSelected);
             }
             currentStep++;
         }
@@ -100,12 +98,11 @@ namespace SelectionSort {
         // RECORD THE SORTING STEP (ORDERED LIST)
         for (int i = 0; i < LIST_SIZE; i++) {
             offset = (currentStep * LIST_SIZE) + i;
-            sort.steps[offset].value = array[i].value;
-            sort.steps[offset].rect_color = rect_green_color;
+            sequence->steps[offset].value = array[i].value;
+            sequence->steps[offset].rect_color = rect_green_color;
         }
 
         free(array);
-        return sort;
     }
 
 }

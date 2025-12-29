@@ -1,25 +1,29 @@
 #ifndef SORT_H
 #define SORT_H
 
+#include <cstdlib>
+#include <memory>
+
 #include <SDL3/SDL.h>
 
 #include <List.hpp>
 #include <Rect.hpp>
 
-typedef struct {
+struct SortStep {
     int value;
     rgb_color rect_color;
-} SortStep;
+};
 
-typedef struct {
-    int stepCount;
-    SortStep* steps;
-} SortSequence;
+struct SortSequence {
+    int stepCount = 0;
+    SortStep* steps = nullptr;
 
-#define create_sort_sequence(count) { .stepCount = count };
+    // DECONSTRUCTOR
+    ~SortSequence() { std::free(steps); }
+};
 
-SortSequence GetSortSequence(int sortId, Rectangle* items);
+void UpdateSequence(int sortId, Rectangle* items, SortSequence* sequence);
 
-bool IncrementStep(int stepIndex, SortSequence sequence, Rectangle* items);
+bool IncrementStep(int stepIndex, SortSequence* sequence, Rectangle* items);
 
 #endif

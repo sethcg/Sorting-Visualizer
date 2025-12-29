@@ -57,7 +57,7 @@ cmake --preset default
 
 # BUILD DEBUG (RUN TESTS)
 cmake --build --preset debug
-ctest --preset debug
+ctest --preset default -C debug
 
 # BUILD RELEASE
 cmake --build --preset release

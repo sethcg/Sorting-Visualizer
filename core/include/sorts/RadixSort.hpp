@@ -16,11 +16,11 @@ namespace RadixSort {
 
     int GetStepCount(Rectangle* items);
 
-    void CountSort(Rectangle* array, int exponent, int* currentStep, SortSequence sort);
+    void CountSort(Rectangle* array, int exponent, int* currentStep, SortSequence* sort);
 
-    void RadixSort(Rectangle* array, int* currentStep, SortSequence sort);
+    void RadixSort(Rectangle* array, int* currentStep, SortSequence* sort);
 
-    SortSequence GetSequence(Rectangle* items);
+    void SetSequence(Rectangle* items, SortSequence* sequence);
 
 }
 

@@ -96,7 +96,7 @@ namespace MergeSort {
         return stepCount[0];
     }
 
-    void Merge(Rectangle* array, int left, int middle, int right, int* currentStep, SortSequence sort, int currentSize) {
+    void Merge(Rectangle* array, int left, int middle, int right, int* currentStep, SortSequence* sequence, int currentSize) {
         const int left_size = middle - left + 1;
         const int right_size = right - middle;
 
@@ -120,12 +120,12 @@ namespace MergeSort {
 
             for (int i = 0; i < LIST_SIZE; i++) {
                 offset = (currentStep[0] * LIST_SIZE) + i;
-                sort.steps[offset].value = array[i].value;
-                sort.steps[offset].rect_color = rect_base_color;
+                sequence->steps[offset].value = array[i].value;
+                sequence->steps[offset].rect_color = rect_base_color;
 
                 bool inGrouping = i >= left && i <= right;
                 bool isSelected = (left + l_index) == i || (right - r_index) == i;
-                sort.steps[offset].rect_color = GetRectangleColor(isSelected, inGrouping);
+                sequence->steps[offset].rect_color = GetRectangleColor(isSelected, inGrouping);
             }
             (*currentStep)++;
 
@@ -156,23 +156,21 @@ namespace MergeSort {
         // RECORD THE SORTING STEP (SNAPSHOT OF THE ARRAY)
         for (int i = 0; i < LIST_SIZE; i++) {
             offset = (currentStep[0] * LIST_SIZE) + i;
-            sort.steps[offset].value = array[i].value;
+            sequence->steps[offset].value = array[i].value;
 
             bool inGrouping = i >= left && i <= right;
             bool isSelected = (left + l_index) == i || (right - r_index) == i;
-            sort.steps[offset].rect_color = GetRectangleColor(isSelected, inGrouping);
+            sequence->steps[offset].rect_color = GetRectangleColor(isSelected, inGrouping);
         }
         (*currentStep)++;
     }
 
-    SortSequence GetSequence(Rectangle* items) {
+    void SetSequence(Rectangle* items, SortSequence* sequence) {
         Rectangle* array = CopyArray(items);
 
         // RUN THE SORT TO CALCULATE THE TOTAL NUMBER OF STEPS
-        int stepCount = GetStepCount(items);
-
-        SortSequence sort = create_sort_sequence(stepCount);
-        sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
+        sequence->stepCount = GetStepCount(items);
+        sequence->steps = (SortStep*) malloc(LIST_SIZE * sequence->stepCount * sizeof(SortStep));
 
         int offset;
         int* currentStep = (int*) calloc(1, sizeof(int));
@@ -187,19 +185,18 @@ namespace MergeSort {
                 int rightEnd = min(leftStart + 2 * currentSize - 1, LIST_SIZE - 1);
                 
                 // MERGE THE SUBARRAYS
-                Merge(array, leftStart, mid, rightEnd, currentStep, sort, currentSize);
+                Merge(array, leftStart, mid, rightEnd, currentStep, sequence, currentSize);
             }
         }
 
         // RECORD FINAL STEP (ORDERED LIST)
         for (int i = 0; i < LIST_SIZE; i++) {
             offset = (currentStep[0] * LIST_SIZE) + i;
-            sort.steps[offset].value = array[i].value;
-            sort.steps[offset].rect_color = rect_green_color;
+            sequence->steps[offset].value = array[i].value;
+            sequence->steps[offset].rect_color = rect_green_color;
         }
         
         free(array);
-        return sort;
     }
 
 }

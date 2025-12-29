@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <Rect.hpp>
 #include <Sort.hpp>
 
@@ -8,29 +10,25 @@
 #define MINIMUM_WINDOW_WIDTH 400
 #define MINIMUM_WINDOW_HEIGHT 400
 
-#define DEFAULT_SORTING_DELAY_MILLISECONDS 100
-
-// #define WINDOW_WIDTH 1280
-// #define WINDOW_HEIGHT 720
-// #define WINDOW_FLAGS SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
-
-// #define MINIMUM_WINDOW_WIDTH 640
-// #define MINIMUM_WINDOW_HEIGHT 360
-
-// #define GLSL_VERSION "#version 330"
+#define DEFAULT_SORTING_DELAY_SECONDS 0.1f
 
 namespace Application {
 
     struct AppContext {
-        Rectangle* items;
+        std::unique_ptr<Rectangle[]> items;
 
-        bool isSorting;
+        float elapsedTime;  // ELAPSED TIME SINCE LAST ITERATION STEP (SECONDS)
+        float delayTime;    // ITERATION DELAY TIME (SECONDS)
 
-        int sortId;
-        int stepIndex;
-        int lastTime;
-        int delayInMilliseconds;
-        SortSequence sequence;
+        bool isSorting = false;
+        int sortId = 0;
+        int stepIndex = 0;
+        std::unique_ptr<SortSequence> sequence;
+
+        AppContext() {
+            elapsedTime = 0.0f;
+            delayTime = DEFAULT_SORTING_DELAY_SECONDS;
+        }
     };
 
 }

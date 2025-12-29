@@ -77,7 +77,7 @@ namespace RadixSort {
         return stepCount[0];
     }
 
-    void CountSort(Rectangle* array, int exponent, int* currentStep, SortSequence sort) {
+    void CountSort(Rectangle* array, int exponent, int* currentStep, SortSequence* sequence) {
         int* output = (int*) calloc(LIST_SIZE, sizeof(int));
 
         // ARRAY CONTAINING COUNT OF DIGITS [0 - 9] (SO SIZE OF 10)
@@ -121,45 +121,42 @@ namespace RadixSort {
             int offset;
             for (int index = 0; index < LIST_SIZE; index++) {
                 offset = (currentStep[0] * LIST_SIZE) + index;
-                sort.steps[offset].value = array[index].value;
-                sort.steps[offset].rect_color = rect_base_color;
+                sequence->steps[offset].value = array[index].value;
+                sequence->steps[offset].rect_color = rect_base_color;
             }
             (*currentStep)++;
         }
     }
 
-    void RadixSort(Rectangle* array, int* currentStep, SortSequence sort) {
+    void RadixSort(Rectangle* array, int* currentStep, SortSequence* sequence) {
         int max_value = GetMaxValue(array);
 
         // DO COUNT SORT FOR EACH DIGIT
         for (int exponent = 1; max_value / exponent > 0; exponent *= 10) {
-            CountSort(array, exponent, currentStep, sort);
+            CountSort(array, exponent, currentStep, sequence);
         }
     }
 
-    SortSequence GetSequence(Rectangle* items) {
+    void SetSequence(Rectangle* items, SortSequence* sequence) {
         Rectangle* array = CopyArray(items);
 
         // RUN THE SORT TO CALCULATE THE TOTAL NUMBER OF STEPS
-        int stepCount = GetStepCount(items);
-
-        SortSequence sort = create_sort_sequence(stepCount);
-        sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
+        sequence->stepCount = GetStepCount(items);
+        sequence->steps = (SortStep*) malloc(LIST_SIZE * sequence->stepCount * sizeof(SortStep));
 
         int* currentStep = (int*) calloc(1, sizeof(int));
 
-        RadixSort(array, currentStep, sort);
+        RadixSort(array, currentStep, sequence);
 
         // RECORD FINAL STEP (ORDERED LIST)
         int offset;
         for (int i = 0; i < LIST_SIZE; i++) {
             offset = (currentStep[0] * LIST_SIZE) + i;
-            sort.steps[offset].value = array[i].value;
-            sort.steps[offset].rect_color = rect_green_color;
+            sequence->steps[offset].value = array[i].value;
+            sequence->steps[offset].rect_color = rect_green_color;
         }
         
         free(array);
-        return sort;
     }
 
 }

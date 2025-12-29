@@ -61,7 +61,10 @@ void ShuffleList(Rectangle* items) {
     }
 }
 
-void DrawList(SDL_Renderer *renderer, Rectangle* items) {
+void DrawList(SDL_Renderer *renderer, Rectangle* items, int window_width, int window_height) {
+    // UPDATE THE LIST POSITIONS
+    ResizeList(items, window_width, window_height);
+
     // DRAW BACKGROUND COLOR
     SDL_SetRenderDrawColor(renderer, 30, 30, 30, SDL_ALPHA_OPAQUE_FLOAT);
     SDL_RenderClear(renderer);
@@ -71,7 +74,7 @@ void DrawList(SDL_Renderer *renderer, Rectangle* items) {
     }
 }
 
-static void DrawRect(SDL_Renderer *renderer, Rectangle* items, int index) {
+void DrawRect(SDL_Renderer *renderer, Rectangle* items, int index) {
     SDL_FRect rect_item = {
         .x = (float) items[index].start_x,
         .y = (float) items[index].start_y,

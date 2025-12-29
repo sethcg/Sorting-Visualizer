@@ -70,7 +70,7 @@ namespace QuickSort {
         return stepCount[0];
     }
 
-    int Partition(Rectangle* array, int low, int high, int* currentStep, SortSequence sort) {
+    int Partition(Rectangle* array, int low, int high, int* currentStep, SortSequence* sequence) {
         // THIS IS THE LOMUTO PARTITION ALGORITHM
         int offset;
 
@@ -88,13 +88,13 @@ namespace QuickSort {
             // RECORD THE SORTING STEP (SNAPSHOT OF THE ARRAY)
             for (int index = 0; index < LIST_SIZE; index++) {
                 offset = (currentStep[0] * LIST_SIZE) + index;
-                sort.steps[offset].value = array[index].value;
+                sequence->steps[offset].value = array[index].value;
 
                 // SET RECTANGLE COLOR VALUE
                 bool isOrdered = index < low;
                 bool isPivot = index == pivot_index;
                 bool isSelected = index == i || index == j;
-                sort.steps[offset].rect_color = GetRectangleColor(isOrdered, isPivot, isSelected);
+                sequence->steps[offset].rect_color = GetRectangleColor(isOrdered, isPivot, isSelected);
             }
             (*currentStep)++;
 
@@ -105,13 +105,13 @@ namespace QuickSort {
                 // RECORD THE SORTING STEP (SNAPSHOT OF THE ARRAY)
                 for (int index = 0; index < LIST_SIZE; index++) {
                     offset = (currentStep[0] * LIST_SIZE) + index;
-                    sort.steps[offset].value = array[index].value;
+                    sequence->steps[offset].value = array[index].value;
 
                     // SET RECTANGLE COLOR VALUE
                     bool isOrdered = index < low;
                     bool isPivot = index == pivot_index;
                     bool isSelected = index == i || index == j;
-                    sort.steps[offset].rect_color = GetRectangleColor(isOrdered, isPivot, isSelected);
+                    sequence->steps[offset].rect_color = GetRectangleColor(isOrdered, isPivot, isSelected);
                 }
                 (*currentStep)++;
             }
@@ -123,40 +123,37 @@ namespace QuickSort {
         return i + 1;
     }
 
-    void QuickSort(Rectangle* array, int low, int high, int* currentStep, SortSequence sort) {
+    void QuickSort(Rectangle* array, int low, int high, int* currentStep, SortSequence* sequence) {
         if (low < high) {
             // PARTITION RETURNS THE PIVOT INDEX
-            int pivot_index = Partition(array, low, high, currentStep, sort);
+            int pivot_index = Partition(array, low, high, currentStep, sequence);
             
             // RECURSIVE CALLS FOR SMALLER, GREATER, OR EQUAL ELEMENTS
-            QuickSort(array, low, pivot_index - 1, currentStep, sort);
-            QuickSort(array, pivot_index + 1, high, currentStep, sort);
+            QuickSort(array, low, pivot_index - 1, currentStep, sequence);
+            QuickSort(array, pivot_index + 1, high, currentStep, sequence);
         }
     }
 
-    SortSequence GetSequence(Rectangle* items) {
+    void SetSequence(Rectangle* items, SortSequence* sequence) {
         Rectangle* array = CopyArray(items);
 
         // RUN THE SORT TO CALCULATE THE TOTAL NUMBER OF STEPS
-        int stepCount = GetStepCount(items);
-
-        SortSequence sort = create_sort_sequence(stepCount);
-        sort.steps = (SortStep*) malloc(LIST_SIZE * stepCount * sizeof(SortStep));
+        sequence->stepCount = GetStepCount(items);
+        sequence->steps = (SortStep*) malloc(LIST_SIZE * sequence->stepCount * sizeof(SortStep));
 
         int* currentStep = (int*) calloc(1, sizeof(int));
 
-        QuickSort(array, 0, LIST_SIZE - 1, currentStep, sort);
+        QuickSort(array, 0, LIST_SIZE - 1, currentStep, sequence);
 
         // RECORD FINAL STEP (ORDERED LIST)
         int offset;
         for (int i = 0; i < LIST_SIZE; i++) {
             offset = (currentStep[0] * LIST_SIZE) + i;
-            sort.steps[offset].value = array[i].value;
-            sort.steps[offset].rect_color = rect_green_color;
+            sequence->steps[offset].value = array[i].value;
+            sequence->steps[offset].rect_color = rect_green_color;
         }
         
         free(array);
-        return sort;
     }
 
 }
