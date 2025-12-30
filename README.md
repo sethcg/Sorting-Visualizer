@@ -5,27 +5,7 @@
 <dl>
   <dd>
     This is a C++ application that implements various <a href="https://en.wikipedia.org/wiki/Sorting_algorithm">sorting algorithms</a> 
-    using colors and shapes to represent how the underlying data structure is changing.
-  </dd>
-</dl>
-
-<dl>
-  <dd>
-  <details closed>
-  <summary><b>Time Complexity</b></summary>
-
-  | Name       | Best               | Average            | Worst              |
-  |:-----------|:-------------------|:-------------------|:-------------------|
-  | Bubble     | O(n)               | O(n<sup>2</sup>)   | O(n<sup>2</sup>)   |
-  | Cocktail   | O(n)               | O(n<sup>2</sup>)   | O(n<sup>2</sup>)   |
-  | Heap       | O(n log(n))        | O(n log(n))        | O(n log(n))        |
-  | Insertion  | O(n)               | O(n<sup>2</sup>)   | O(n<sup>2</sup>)   |
-  | Merge      | O(n log(n))        | O(n log(n))        | O(n log(n))        |
-  | Quick      | O(n log(n))        | O(n log(n))        | O(n<sup>2</sup>)   |
-  | Radix      | O(nk)              | O(nk)              | O(nk)              |
-  | Selection  | O(n<sup>2</sup>)   | O(n<sup>2</sup>)   | O(n<sup>2</sup>)   |
-
-  </details>
+    using colors and shapes to represent changes in the data structure.
   </dd>
 </dl>
 
@@ -34,8 +14,6 @@
 <details open>
   <summary>Show</summary>
   <img width="598px" height="600px" src="https://github.com/user-attachments/assets/53180fca-318b-4c76-9f2f-363413b2bc00" alt="image">
-
-
   <br>
 </details>
 
@@ -57,10 +35,11 @@ cmake --preset default
 
 # BUILD DEBUG (RUN TESTS)
 cmake --build --preset debug
-ctest --preset default -C debug
+ctest --preset default --build-config debug
 
 # BUILD RELEASE
 cmake --build --preset release
+ctest --preset default --build-config release
 
 ```
 

@@ -1,9 +1,21 @@
 #ifndef APP_H
 #define APP_H
 
+#include <memory>
+#include <vector>
+#include <string>
+#include <ctime>
+#include <cstdlib>
+
 #include <SDL3/SDL.h>
+#include <imgui.h>
+#include <imgui_impl_sdl3.h>
+#include <imgui_impl_sdlrenderer3.h>
 
 #include <AppContext.hpp>
+#include <ListManager.hpp>
+#include <Renderer.hpp>
+#include <SortManager.hpp>
 #include <UserInterface.hpp>
 
 namespace Application {
@@ -37,11 +49,8 @@ namespace Application {
             bool CreateWindowAndRenderer(const char* title);
             void RenderScene(float deltaTime);
 
-            int width = WINDOW_WIDTH;
-            int height = WINDOW_HEIGHT;
-
             SDL_Window* window = nullptr;
-            SDL_Renderer* renderer = nullptr;
+            SDL_Renderer* sdl_renderer = nullptr;
 
             float deltaTime = 0.0f;
             float lastFrameTime = 0.0f;

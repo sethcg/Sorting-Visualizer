@@ -51,4 +51,4 @@ jobs:
 
     - name: RUN TESTS
       if: runner.os == 'Linux'
-      run: ctest --preset default -C release
+      run: ctest --preset default --build-config release

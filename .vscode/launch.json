@@ -3,14 +3,21 @@
     "configurations": [
         {
             "name": "Launch Debug (Windows)",
-            "type": "cppvsdbg",
+            "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}\\build\\default\\Debug\\main.exe",
             "cwd": "${workspaceFolder}\\build\\default\\Debug",
             "args": [],
-            "stopAtEntry": false,
             "environment": [],
-            "console": "newExternalWindow",
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
             "preLaunchTask": "Build Debug"
         },
         {
@@ -20,9 +27,8 @@
             "program": "${workspaceFolder}\\build\\default\\Release\\main.exe",
             "cwd": "${workspaceFolder}\\build\\default\\Release",
             "args": [],
-            "stopAtEntry": false,
             "environment": [],
-            "console": "newExternalWindow",
+            "console": "integratedTerminal",
             "preLaunchTask": "Build Release"
         }
     ]

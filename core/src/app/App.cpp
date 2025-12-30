@@ -1,3 +1,4 @@
+#include <atomic>
 #include <memory>
 #include <vector>
 #include <string>
@@ -11,8 +12,9 @@
 
 #include <App.hpp>
 #include <AppContext.hpp>
-#include <List.hpp>
-#include <Sort.hpp>
+#include <ListManager.hpp>
+#include <Renderer.hpp>
+#include <SortManager.hpp>
 #include <UserInterface.hpp>
 
 namespace Application {
@@ -21,9 +23,9 @@ namespace Application {
         SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
 
         SDL_CreateWindowAndRenderer("Sorting Visualizer", 
-            WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer
+            WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_FLAGS, &window, &sdl_renderer
         );
-        return window != nullptr && renderer != nullptr;
+        return window != nullptr && sdl_renderer != nullptr;
     }
 
     SDL_AppResult App::Init(int argc, char** argv) {
@@ -31,7 +33,9 @@ namespace Application {
         if (!CreateWindowAndRenderer("Sorting Visualizer")) return SDL_APP_FAILURE;
 
         srand(time(NULL));
-        appContext.items = std::make_unique<Rectangle[]>(LIST_SIZE);
+        appContext.renderer = std::make_unique<Renderer>(sdl_renderer);
+        appContext.sortManager = std::make_unique<SortManager>();
+        appContext.listManager = std::make_unique<ListManager>(WINDOW_WIDTH, WINDOW_HEIGHT);
 
         // SETUP IMGUI
         IMGUI_CHECKVERSION();
@@ -39,16 +43,13 @@ namespace Application {
         ImGuiIO &io = ImGui::GetIO();
         io.IniFilename = NULL;
         io.LogFilename = NULL;
-        ImGui::StyleColorsDark();
+        UserInterface::SetCustomTheme();
 
-        ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
-        ImGui_ImplSDLRenderer3_Init(renderer);
+        ImGui_ImplSDL3_InitForSDLRenderer(window, sdl_renderer);
+        ImGui_ImplSDLRenderer3_Init(sdl_renderer);
 
         SDL_SetWindowResizable(window, true);
         SDL_SetWindowMinimumSize(window, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
-
-        // CREATE LIST AND CALCULATE INITIAL WIDTH/HEIGHT OF RECTANGLES
-        CreateList(appContext.items.get(), width, height);
 
         return SDL_APP_CONTINUE;
     }
@@ -58,8 +59,9 @@ namespace Application {
             case SDL_EVENT_QUIT:
                 return SDL_APP_SUCCESS;
             case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
-                width = event->window.data1;
-                height = event->window.data2;
+                int32_t width = event->window.data1;
+                int32_t height = event->window.data2;
+                appContext.listManager->Resize(width, height);
                 break;
         }
         ImGui_ImplSDL3_ProcessEvent(event);
@@ -67,24 +69,27 @@ namespace Application {
     }
 
     void App::RenderScene(float deltaTime) {
-        Rectangle* items = appContext.items.get();
+        std::vector<Rect::Rectangle>& rects = appContext.listManager->GetItems();
 
-        if (appContext.isSorting) {
+        if (appContext.isSortingFlag.load(std::memory_order_acquire)) {
             appContext.elapsedTime += deltaTime;
 
-            if (appContext.elapsedTime >= appContext.delayTime) {
-                if (IncrementStep(appContext.stepIndex, appContext.sequence.get(), items)) {
-                    appContext.isSorting = false;
-                    appContext.stepIndex = 0;
-                } else {
-                    appContext.stepIndex++;
+            constexpr float delayMin = 0.01f;
+            constexpr float delayMax = 0.25f;
+            float speed = appContext.delayTimeNormalized;
+            float delayTime = delayMax - (delayMax - delayMin) * (speed * speed);
+
+            // STEP AT MOST ONCE PER FRAME
+            if (appContext.elapsedTime >= delayTime) {
+                if (appContext.sortManager->IncrementStep(rects)) {
+                    appContext.isSortingFlag.store(false, std::memory_order_release);
+                    appContext.sortManager->stepIndex = 0;
+                    appContext.elapsedTime = 0.0f;
                 }
-                appContext.elapsedTime = 0.0f;
+                appContext.elapsedTime -= delayTime;
             }
         }
-
-        // RENDER LIST (EACH FRAME)
-        DrawList(renderer, items, width, height);
+        appContext.renderer->DrawList(rects, *appContext.listManager);
     }
 
     SDL_AppResult App::Frame() {
@@ -98,15 +103,15 @@ namespace Application {
         ImGui::NewFrame();
 
         // RENDER GUI
-        UserInterface::RenderGUI(&appContext, width, height);
+        UserInterface::RenderGUI(&appContext);
 
         // RENDER SCENE
         RenderScene(deltaTime);
 
         ImGui::Render();
 
-        ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
-        SDL_RenderPresent(renderer);
+        ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), sdl_renderer);
+        SDL_RenderPresent(sdl_renderer);
         return SDL_APP_CONTINUE;
     }
 
@@ -115,7 +120,7 @@ namespace Application {
         ImGui_ImplSDL3_Shutdown();
         ImGui::DestroyContext();
 
-        SDL_DestroyRenderer(renderer);
+        SDL_DestroyRenderer(sdl_renderer);
         SDL_DestroyWindow(window);
         SDL_Quit();
     }

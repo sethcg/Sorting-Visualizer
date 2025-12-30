@@ -1,3 +1,6 @@
+#include <atomic>
+#include <vector>
+
 #include <imgui.h>
 #include <imgui_internal.h>
 
@@ -6,58 +9,80 @@
 
 namespace UserInterface {
 
-    char* sortOptions[8] = {
-        (char*) "Bubble",
-        (char*) "Cocktail",
-        (char*) "Heap",
-        (char*) "Insertion",
-        (char*) "Merge",
-        (char*) "Quick",
-        (char*) "Radix",
-        (char*) "Selection"
-    };
-
-    void RenderGUI(Application::AppContext* appContext, int width, int height) {
-        Rectangle* items = appContext->items.get();
-
-        ImGui::SetNextWindowSize(ImVec2(136, 0));
-        ImGui::SetNextWindowPos(ImVec2(24, 24), ImGuiCond_Once);
-        ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_NoCollapse);
-
-        if (ImGui::Button("Shuffle", ImVec2(120, 20))) {
-            appContext->isSorting = false;
+    void CreateShuffleButton(Application::AppContext* appContext) {
+        if (ImGui::Button("Shuffle", ImVec2(ImGui::GetContentRegionAvail().x, 0))) {
+            appContext->isSortingFlag.store(false, std::memory_order_release);
             appContext->elapsedTime = 0.0f;
-            appContext->stepIndex = 0;
-            ShuffleList(items);
+            appContext->sortManager->stepIndex = 0;
+            appContext->listManager->Shuffle();
+            appContext->sortManager->GenerateSequence(appContext->listManager->GetItems());
         }
+    }
 
-        if (ImGui::Button("Sort", ImVec2(120, 20))) {
-            if (!appContext->isSorting) {
-                try {
-                    appContext->sequence = std::make_unique<SortSequence>();
-                    UpdateSequence(appContext->sortId, items, appContext->sequence.get());
-                    appContext->stepIndex = 0;
-                    appContext->isSorting = true;
-                } 
-                catch (const std::exception& e) {
-                    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create sort sequence: %s", e.what());
-                }
-                catch (...) {
-                    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unknown error occurred while creating sort sequence.");
-                }
+    void CreateSortButton(Application::AppContext* appContext) {
+        if (ImGui::Button("Sort", ImVec2(ImGui::GetContentRegionAvail().x, 0))) {
+            if (!appContext->isSortingFlag.load(std::memory_order_acquire)) {
+                appContext->isSortingFlag.store(true, std::memory_order_release);
+                appContext->sortManager->stepIndex = 0;
             }
         }
+    }
 
-        ImGui::SetNextItemWidth(120);
-        if(ImGui::BeginCombo("##Select_Sort", sortOptions[appContext->sortId], ImGuiComboFlags_NoArrowButton)) {
-            for(int i = 0; i < sizeof(sortOptions) / sizeof(char*); i++) {
-                if(ImGui::Selectable(sortOptions[i], (appContext->sortId == i))) {
-                    if(!appContext->isSorting) appContext->sortId = i;
+    void CreateSortSelectionDropdown(Application::AppContext* appContext) {
+        float maxWidth = 150.0f;
+        float availableWidth = ImGui::GetContentRegionAvail().x;
+        float comboWidth = (availableWidth > maxWidth) ? maxWidth : availableWidth;
+        ImGui::SetNextItemWidth(comboWidth);
+
+        int sortId = appContext->sortManager->currentSortId;
+        if (ImGui::BeginCombo("##Select_Sort", appContext->sortManager->GetSortName(sortId), ImGuiComboFlags_NoArrowButton)) {
+            int sortCount = appContext->sortManager->GetSortCount();
+            for (int i = 0; i < sortCount; i++) {
+                if (ImGui::Selectable(appContext->sortManager->GetSortName(i), sortId == i)) {
+                    if (!appContext->isSortingFlag.load(std::memory_order_acquire)) {
+                        appContext->sortManager->currentSortId = i;
+                        appContext->sortManager->SetSort(i);
+                        appContext->sortManager->GenerateSequence(appContext->listManager->GetItems());
+                    }
                 }
             }
             ImGui::EndCombo();
         }
-        
+    }
+
+    void CreateSortSpeedSlider(Application::AppContext* appContext) {
+        float maxWidth = 150.0f;
+        float availableWidth = ImGui::GetContentRegionAvail().x;
+        float sliderWidth = (availableWidth > maxWidth) ? maxWidth : availableWidth;
+        ImGui::SetNextItemWidth(sliderWidth);
+
+        // USER ADJUSTED VALUE, DETERMINES SORT SPEED (0 = SLOWEST, 1 = FASTEST)
+        ImGui::SliderFloat("##SORT_SPEED", &appContext->delayTimeNormalized, 0.0f, 1.0f);
+    }
+
+    void RenderGUI(Application::AppContext* appContext) {
+        // NUMBER OF ITEMS IN THE PANEL (SHUFFLE, SORT, ...)
+        int itemCount = 4;
+        ImGuiStyle& style = ImGui::GetStyle();
+
+        float itemHeight = ImGui::GetFrameHeight();                             // BASE ITEM HEIGHT
+        float itemFramePadding = itemCount * (style.FramePadding.y * 2.0f);     // TOP/BOTTOM FRAME PADDING
+        float itemSpacing = (itemCount - 1) * style.ItemSpacing.y;              // VERTICAL SPACING BETWEEN ITEMS
+        float windowPadding = style.WindowPadding.y * 2.0f;                     // TOP/BOTTOM WINDOW PADDING
+        float minHeight = windowPadding + itemFramePadding + itemSpacing + (itemCount * itemHeight);
+
+        float minWidth = 120.0f;
+        ImVec2 minSize(minWidth, minHeight);
+        ImVec2 maxSize(minWidth * 2.0f, float(MINIMUM_WINDOW_HEIGHT) / 2.0f);
+        ImGui::SetNextWindowSize(minSize, ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSizeConstraints(minSize, maxSize);
+        ImGui::Begin("##CONTROL_PANEL", nullptr, ImGuiWindowFlags_NoCollapse);
+
+        CreateShuffleButton(appContext);
+        CreateSortButton(appContext);
+        CreateSortSelectionDropdown(appContext);
+        CreateSortSpeedSlider(appContext);
+
         ImGui::End();
     }
 
