@@ -9,23 +9,23 @@
 #include <Sort.hpp>
 
 #include <Bubble.hpp>
-// #include <CocktailSort.hpp>
-// #include <HeapSort.hpp>
-// #include <InsertionSort.hpp>
-// #include <MergeSort.hpp>
-// #include <QuickSort.hpp>
-// #include <RadixSort.hpp>
-// #include <SelectionSort.hpp>
+#include <Cocktail.hpp>
+#include <Insertion.hpp>
+// #include <Heap.hpp>
+// #include <Merge.hpp>
+// #include <Quick.hpp>
+// #include <Radix.hpp>
+// #include <Selection.hpp>
 
 class SortManager {
     public:
         SortManager() {
             // ARRAY OF SORTING ALGORITHMS
-            initializedCount = 1;
+            initializedCount = 3;
             sorts[0] = std::make_unique<Bubble>();
-            // sorts[1] = std::make_unique<CocktailSort>();
-            // sorts[2] = std::make_unique<HeapSort>();
-            // sorts[3] = std::make_unique<InsertionSort>();
+            sorts[1] = std::make_unique<Cocktail>();
+            sorts[2] = std::make_unique<Insertion>();
+            // sorts[3] = std::make_unique<HeapSort>();
             // sorts[4] = std::make_unique<MergeSort>();
             // sorts[5] = std::make_unique<QuickSort>();
             // sorts[6] = std::make_unique<RadixSort>();
@@ -50,7 +50,7 @@ class SortManager {
 
     private:
         int initializedCount = 0;
-        std::array<std::unique_ptr<Sort::Sort>, 8> sorts;
+        std::array<std::unique_ptr<Sort>, 8> sorts;
         std::unique_ptr<SortSequence> sortSequence;
 };
 

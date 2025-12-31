@@ -10,9 +10,9 @@
 
 namespace TestSort {
 
-    static const int LIST_SIZE = 10;
+    inline constexpr int LIST_SIZE = 10;
 
-    SortSequence GenerateSequence(Sort::Sort* sort) {
+    inline SortSequence GenerateSequence(Sort* sort) {
         // CREATE MOCK RECTANGLE LIST
         std::vector<Rect::Rectangle> rects;
         rects.reserve(LIST_SIZE);

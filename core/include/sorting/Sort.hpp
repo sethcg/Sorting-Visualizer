@@ -21,24 +21,23 @@ struct SortSequence {
     std::unique_ptr<std::vector<SortStep>> steps;
 };
 
-namespace Sort {
+class Sort {
+    public:
+        virtual ~Sort() = default;
 
-    class Sort {
-        public:
-            virtual ~Sort() = default;
+        virtual const char* GetName() const = 0;
 
-            virtual const char* GetName() const = 0;
+        void SetSequence(SortSequence* sequence, std::vector<Rect::Rectangle> rects);
 
-            virtual void SetSequence(SortSequence* sequence, std::vector<Rect::Rectangle> rects) = 0;
+    protected:
+        virtual void RunSort(std::vector<Rect::Rectangle>& array, SortSequence& sequence) = 0;
 
-        protected:
-            static void PushStep(SortSequence& sequence, std::vector<Rect::Rectangle> rects);
+        static void PushStep(SortSequence& sequence, std::vector<Rect::Rectangle> rects);
 
-            static void FirstStep(SortSequence& sequence, const std::vector<Rect::Rectangle>& rects);
-            
-            static void LastStep(SortSequence& sequence, std::vector<Rect::Rectangle>& rects);
-    };
-
-}
+    private:
+        static void FirstStep(SortSequence& sequence, const std::vector<Rect::Rectangle>& rects);
+        
+        static void LastStep(SortSequence& sequence, std::vector<Rect::Rectangle>& rects);
+};
 
 #endif

@@ -65,10 +65,10 @@ cloc --include-lang=C++,"C/C++ Header",CMake --exclude-dir=build,vcpkg --out=lin
 
 | Language         | Files | Blank | Comment | Code |
 |:-----------------|:-----:|:-----:|:-------:|:----:|
-| **C++**          | 11    | 122   | 34      | 417  |
-| **C/C++ Header** | 11    | 127   | 25      | 295  |
+| **C++**          | 15    | 165   | 63      | 539  |
+| **C/C++ Header** | 13    | 125   | 21      | 324  |
 | **CMake**        | 5     | 29    | 17      | 77   |
 |                                                   |
-| **Total**        | 39    | 268   | 76      | 789  |
+| **Total**        | 33    | 319   | 101     | 940  |
 
 </details>
