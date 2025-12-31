@@ -4,26 +4,23 @@
 
 <dl>
   <dd>
-    This is a C++ application that implements various <a href="https://en.wikipedia.org/wiki/Sorting_algorithm">sorting algorithms</a> 
-    using colors and shapes to represent changes in the data structure.
+    This application implements <a href="https://en.wikipedia.org/wiki/Sorting_algorithm">sorting algorithms</a>, representing their state with colors and shape positions.
   </dd>
 </dl>
 
 ### Preview:
 
 <details open>
-  <summary>Show</summary>
-  <img width="598px" height="600px" src="https://github.com/user-attachments/assets/53180fca-318b-4c76-9f2f-363413b2bc00" alt="image">
+  <summary><b>Demo</b></summary>
+  <img width="274px" height="256px" src="https://github.com/user-attachments/assets/ecb20ad5-957e-4b4c-bd11-f576a8757b46" alt="demo">
   <br>
 </details>
 
-### Tooling:
-
-  - [x] SDL3
-  - [x] ImGui
-  - [x] Google Test
-  - [x] Vcpkg
-  - [x] CMake
+<details closed>
+  <summary><b>Image</b></summary>
+  <img width="728px" height="488px" src="https://github.com/user-attachments/assets/ead2ad2f-3a62-424c-b18f-9e53e9c5c031" alt="image"/>
+  <br>
+</details>
 
 ---
 ### Developer Notes:
@@ -33,7 +30,7 @@
 # CONFIGURE
 cmake --preset default
 
-# BUILD DEBUG (RUN TESTS)
+# BUILD DEBUG
 cmake --build --preset debug
 ctest --preset default --build-config debug
 
@@ -42,6 +39,18 @@ cmake --build --preset release
 ctest --preset default --build-config release
 
 ```
+
+<details closed>
+<summary><b>Tooling</b></summary>
+<br/>
+
+  - [x] SDL3
+  - [x] ImGui
+  - [x] Google Test
+  - [x] Vcpkg
+  - [x] CMake
+
+</details>
 
 <details closed>
 <summary><b>Line Count</b></summary>
@@ -56,10 +65,10 @@ cloc --include-lang=C++,"C/C++ Header",CMake --exclude-dir=build,vcpkg --out=lin
 
 | Language         | Files | Blank | Comment | Code |
 |:-----------------|:-----:|:-----:|:-------:|:----:|
-| **C++**          | 21    | 424   | 227     | 1253 |
-| **C/C++ Header** | 14    | 112   | 1       | 197  |
-| **CMake**        | 4     | 24    | 19      | 63   |
+| **C++**          | 11    | 122   | 34      | 417  |
+| **C/C++ Header** | 11    | 127   | 25      | 295  |
+| **CMake**        | 5     | 29    | 17      | 77   |
 |                                                   |
-| **Total**        | 39    | 560   | 247     | 1513 |
+| **Total**        | 39    | 268   | 76      | 789  |
 
 </details>
