@@ -29,11 +29,7 @@ namespace UserInterface {
     }
 
     void CreateSortSelectionDropdown(Application::AppContext* appContext) {
-        float maxWidth = 150.0f;
-        float availableWidth = ImGui::GetContentRegionAvail().x;
-        float comboWidth = (availableWidth > maxWidth) ? maxWidth : availableWidth;
-        ImGui::SetNextItemWidth(comboWidth);
-
+        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
         int sortId = appContext->sortManager->currentSortId;
         if (ImGui::BeginCombo("##Select_Sort", appContext->sortManager->GetSortName(sortId), ImGuiComboFlags_NoArrowButton)) {
             int sortCount = appContext->sortManager->GetSortCount();
@@ -51,10 +47,7 @@ namespace UserInterface {
     }
 
     void CreateSortSpeedSlider(Application::AppContext* appContext) {
-        float maxWidth = 150.0f;
-        float availableWidth = ImGui::GetContentRegionAvail().x;
-        float sliderWidth = (availableWidth > maxWidth) ? maxWidth : availableWidth;
-        ImGui::SetNextItemWidth(sliderWidth);
+        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 
         // USER ADJUSTED VALUE, DETERMINES SORT SPEED (0 = SLOWEST, 1 = FASTEST)
         ImGui::SliderFloat("##SORT_SPEED", &appContext->delayTimeNormalized, 0.0f, 1.0f);
@@ -65,23 +58,21 @@ namespace UserInterface {
         int itemCount = 4;
         ImGuiStyle& style = ImGui::GetStyle();
 
-        float itemHeight = ImGui::GetFrameHeight();                             // BASE ITEM HEIGHT
-        float itemFramePadding = itemCount * (style.FramePadding.y * 2.0f);     // TOP/BOTTOM FRAME PADDING
-        float itemSpacing = (itemCount - 1) * style.ItemSpacing.y;              // VERTICAL SPACING BETWEEN ITEMS
-        float windowPadding = style.WindowPadding.y * 2.0f;                     // TOP/BOTTOM WINDOW PADDING
-        float minHeight = windowPadding + itemFramePadding + itemSpacing + (itemCount * itemHeight);
+        float itemHeight = ImGui::GetFrameHeight();                                     // BASE ITEM HEIGHT
+        float itemFramePadding = (itemCount - 0.5) * (style.FramePadding.y * 2.0f);     // TOP/BOTTOM FRAME PADDING
+        float itemSpacing = (itemCount - 1) * style.ItemSpacing.y;                      // VERTICAL SPACING BETWEEN ITEMS
+        float minHeight = itemFramePadding + itemSpacing + (itemCount * itemHeight);
 
-        float minWidth = 120.0f;
-        ImVec2 minSize(minWidth, minHeight);
-        ImVec2 maxSize(minWidth * 2.0f, float(MINIMUM_WINDOW_HEIGHT) / 2.0f);
+        const float minWidth = float(MINIMUM_WINDOW_WIDTH) / 2.5f;
+        const ImVec2 minSize(minWidth, minHeight);
         ImGui::SetNextWindowSize(minSize, ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSizeConstraints(minSize, maxSize);
-        ImGui::Begin("##CONTROL_PANEL", nullptr, ImGuiWindowFlags_NoCollapse);
+        ImGui::SetNextWindowSizeConstraints(minSize, minSize);
+        ImGui::Begin("##CONTROL_PANEL", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
         CreateShuffleButton(appContext);
         CreateSortButton(appContext);
-        CreateSortSelectionDropdown(appContext);
         CreateSortSpeedSlider(appContext);
+        CreateSortSelectionDropdown(appContext);
 
         ImGui::End();
     }

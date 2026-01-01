@@ -12,7 +12,7 @@ const char* SortManager::GetSortName(int sortId) const {
 }
 
 int SortManager::GetSortCount() const {
-    return initializedCount;
+    return sorts.size();
 }
 
 void SortManager::SetSort(int sortId) {
