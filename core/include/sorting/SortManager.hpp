@@ -11,25 +11,25 @@
 #include <Bubble.hpp>
 #include <Cocktail.hpp>
 #include <Insertion.hpp>
+#include <Selection.hpp>
 // #include <Heap.hpp>
 // #include <Merge.hpp>
 // #include <Quick.hpp>
 // #include <Radix.hpp>
-// #include <Selection.hpp>
 
 class SortManager {
     public:
         SortManager() {
             // ARRAY OF SORTING ALGORITHMS
-            initializedCount = 3;
+            initializedCount = 4;
             sorts[0] = std::make_unique<Bubble>();
             sorts[1] = std::make_unique<Cocktail>();
             sorts[2] = std::make_unique<Insertion>();
-            // sorts[3] = std::make_unique<HeapSort>();
-            // sorts[4] = std::make_unique<MergeSort>();
-            // sorts[5] = std::make_unique<QuickSort>();
-            // sorts[6] = std::make_unique<RadixSort>();
-            // sorts[7] = std::make_unique<SelectionSort>();
+            sorts[3] = std::make_unique<Selection>();
+            // sorts[4] = std::make_unique<HeapSort>();
+            // sorts[5] = std::make_unique<MergeSort>();
+            // sorts[6] = std::make_unique<QuickSort>();
+            // sorts[7] = std::make_unique<RadixSort>();
         }
 
         const char* GetSortName(int sortId) const;
