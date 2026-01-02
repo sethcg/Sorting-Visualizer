@@ -1,11 +1,11 @@
 #ifndef BUBBLE_SORT_H
 #define BUBBLE_SORT_H
 
+#include <algorithm>
 #include <vector>
-#include <memory>
 
-#include <Sort.hpp>
 #include <Rect.hpp>
+#include <Sort.hpp>
 
 class Bubble : public Sort {
     public:

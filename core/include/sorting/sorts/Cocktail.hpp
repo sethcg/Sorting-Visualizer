@@ -1,11 +1,11 @@
 #ifndef COCKTAIL_SORT_H
 #define COCKTAIL_SORT_H
 
+#include <algorithm>
 #include <vector>
-#include <memory>
 
-#include <Sort.hpp>
 #include <Rect.hpp>
+#include <Sort.hpp>
 
 class Cocktail : public Sort {
     public:

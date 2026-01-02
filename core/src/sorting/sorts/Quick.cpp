@@ -1,4 +1,9 @@
 #include <algorithm>
+#include <vector>
+#include <cstddef>
+
+#include <Sort.hpp>
+#include <Rect.hpp>
 #include <Quick.hpp>
 
 void Quick::RunSort(std::vector<Rect::Rectangle>& array, SortSequence& sequence) {

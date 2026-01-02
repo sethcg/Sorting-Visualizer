@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <vector>
-#include <memory>
 
 #include <Bubble.hpp>
 #include <Rect.hpp>

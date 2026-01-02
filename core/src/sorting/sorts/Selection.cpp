@@ -1,10 +1,9 @@
 #include <algorithm>
 #include <vector>
-#include <memory>
 
 #include <Selection.hpp>
-#include <Sort.hpp>
 #include <Rect.hpp>
+#include <Sort.hpp>
 
 void Selection::RunSort(std::vector<Rect::Rectangle>& array, SortSequence& sequence) {
     const size_t size = array.size();
