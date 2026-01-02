@@ -10,6 +10,8 @@ namespace Rect {
         SELECTED,
         COMPARED,
         GROUPING,
+        MERGE_LEFT,
+        MERGE_RIGHT,
         ORDERED
     };
 

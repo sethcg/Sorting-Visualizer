@@ -12,6 +12,7 @@
 #include <Cocktail.hpp>
 #include <Heap.hpp>
 #include <Insertion.hpp>
+#include <Merge.hpp>
 #include <Quick.hpp>
 #include <Selection.hpp>
 
@@ -22,8 +23,9 @@ class SortManager {
             sorts[1] = std::make_unique<Cocktail>();
             sorts[2] = std::make_unique<Heap>();
             sorts[3] = std::make_unique<Insertion>();
-            sorts[4] = std::make_unique<Quick>();
-            sorts[5] = std::make_unique<Selection>();
+            sorts[4] = std::make_unique<Merge>();
+            sorts[5] = std::make_unique<Quick>();
+            sorts[6] = std::make_unique<Selection>();
         }
 
         const char* GetSortName(int sortId) const;
@@ -43,7 +45,7 @@ class SortManager {
         int currentSortId = 0;
 
     private:
-        std::array<std::unique_ptr<Sort>, 6> sorts;
+        std::array<std::unique_ptr<Sort>, 7> sorts;
         std::unique_ptr<SortSequence> sortSequence;
 };
 

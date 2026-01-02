@@ -22,6 +22,10 @@ namespace Color {
     inline constexpr RGB_Color BLUE   { 0,   120, 160 };
     inline constexpr RGB_Color ORANGE { 200, 120, 0   };
 
+    // MERGE SORT HALVES
+    inline constexpr RGB_Color CYAN   { 0,   180, 180 };
+    inline constexpr RGB_Color PURPLE { 150, 80,  200 };
+
     RGB_Color GetRectangleColor(Rect::State state);
 
 }
